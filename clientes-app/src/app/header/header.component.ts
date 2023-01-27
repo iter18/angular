@@ -4,9 +4,10 @@
  *      -La palabra export es un modificar de clase y se coloca para que se pueda registrar como componente en angular y pueda ser usado en otro componente 
  *      -Como nomenclatura siempre deben ser mayusculas las clases y cuando son palabras compuestas Mayucula las iniciales y acompañada al final 
  *          del termino Component: EJ-> HeaderComponent
- *      -Las clases component siempre deben tener la anotación al incio de  @componen y dentro de ella los atributos; Algunos atributos que se puede colocar son los siguientes:
- *          --Selector:nombre con el que queramos que sea identificado en otros componentes
- *          --Template:`` con comillas inversas y dentro de ella se puede colocar html simple a lo máximo 5 lineas, es una recomendación, si superan es mejor crear un archivo y llamarlo con templateUrl 
+ *      -Las clases component siempre deben tener la anotación al incio de  @Component y dentro de ella los atributos; Algunos atributos que se puede colocar son los siguientes:
+ *          --selector:nombre con el que queramos que sea identificado en otros componentes
+ *          --template:`` con comillas inversas y dentro de ella se puede colocar html simple a lo máximo 5 lineas, es una recomendación.
+ *          --templateUrl:'' dentro de las comillas simple va el nombre del archivo que queremos usar, nombre completo con ext, puede ser html, css, etc. 
  *              
  * */
 import { Component } from "@angular/core";
@@ -15,6 +16,7 @@ import { Component } from "@angular/core";
 
 @Component({
     selector:'app-header',
+    /* Esta es una forma de agregar html 
     template:`
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
@@ -71,7 +73,8 @@ import { Component } from "@angular/core";
                 </div>
             </div>
         </nav>
-        `
+        `*/
+        templateUrl: './header.component.html'
 })
 export class HeaderComponent{
 
