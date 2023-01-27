@@ -7,7 +7,8 @@
  *      -Las clases component siempre deben tener la anotación al incio de  @Component y dentro de ella los atributos; Algunos atributos que se puede colocar son los siguientes:
  *          --selector:nombre con el que queramos que sea identificado en otros componentes
  *          --template:`` con comillas inversas y dentro de ella se puede colocar html simple a lo máximo 5 lineas, es una recomendación.
- *          --templateUrl:'' dentro de las comillas simple va el nombre del archivo que queremos usar, nombre completo con ext, puede ser html, css, etc. 
+ *          --templateUrl:'' dentro de las comillas simple va el nombre del archivo html que queremos usar, nombre completo con ext y siempre con ./
+ *          --styleUrls:[''] dentro de las comillas o corchetes colocamos el o los nombres completos con ext. de los archivos css que se usaran, separado por comas  y siempre con ./
  *              
  * */
 import { Component } from "@angular/core";
