@@ -11,6 +11,34 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DirectivaComponent } from './directiva/directiva.component';
 import { ClientesComponent } from './clientes/clientes.component';
+import { RouterModule,Routes } from '@angular/router';
+
+/**
+ * Se declaran las rutas para navegar en este archivo y algunos elementos que lo componen son los sigueintes:
+ * 
+ * path:"Nombre con el que se accedera por url en el navegador"
+ * component: "Nombre del componente al que hará referencia "
+ * redirectTo: "A donde queremos que redirija cuando ingresen a cierta url"
+ * pathMatch : "full" <-el pathMatch en conbinación con el full indica que se cargara el contenido de manera compleata 
+ */
+
+const routes : Routes = [
+  //Esta primera ruta es para indicar que cuando no se coloque nada en la url el home sera /clientes
+  {
+    path : '',
+    redirectTo : '/clientes',
+    pathMatch : 'full'
+  },
+  {
+    path : 'directivas',
+    component : DirectivaComponent
+  },
+  {
+    path : 'clientes',
+    component : ClientesComponent
+  }
+];
+
 
 @NgModule({
   declarations: [
@@ -21,7 +49,9 @@ import { ClientesComponent } from './clientes/clientes.component';
     ClientesComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    //registramos las rutas
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]
