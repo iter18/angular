@@ -4,7 +4,9 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 import { CLIENTES } from './clientes.json';
-import {of, Observable } from 'rxjs';
+import {of, Observable, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 //Apartir de la versión 7 en adelante ya lo inyecta en el app.module.ts por debajo y por eso tiene el providedIn
 @Injectable({
@@ -13,7 +15,9 @@ import {of, Observable } from 'rxjs';
 
 export class ClienteService {
 
-  constructor() { }
+  private urlEndPoint : string = 'http://localhost:8080/api/clientes';
+
+  constructor(private http:HttpClient) { }
 
    //Forma sincrona es decir esepra a que sea llamado el evento
 
@@ -30,6 +34,13 @@ export class ClienteService {
 
   getClientes() : Observable<Cliente[]>{
     //Convertimos nuestro flujo a observable (Stream)
-    return of (CLIENTES);
+    // Se documenta ya que esta es una peticón de un archivo local return of (CLIENTES);
+
+    return this.http.get<Cliente[]>(this.urlEndPoint).pipe(
+      map((response) => {
+        return response as Cliente[]
+      })
+    );
+  
   }
 }

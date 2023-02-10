@@ -12,6 +12,9 @@ import { FooterComponent } from './footer/footer.component';
 import { DirectivaComponent } from './directiva/directiva.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { RouterModule,Routes } from '@angular/router';
+import { HttpClientModule} from '@angular/common/http';
+import { FormComponent } from './clientes/form.component';
+import { FormsModule } from '@angular/forms';
 
 /**
  * Se declaran las rutas para navegar en este archivo y algunos elementos que lo componen son los sigueintes:
@@ -46,10 +49,15 @@ const routes : Routes = [
     HeaderComponent,
     FooterComponent,
     DirectivaComponent,
-    ClientesComponent
+    ClientesComponent,
+    FormComponent
   ],
   imports: [
     BrowserModule,
+    //Libreria para permitir peticiones Http
+    HttpClientModule,
+    //Libreria para trabajar con formularios
+    FormsModule,
     //registramos las rutas
     RouterModule.forRoot(routes)
   ],
