@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Cliente } from './cliente';
+import { ClienteService } from './cliente.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -11,8 +14,12 @@ export class FormComponent implements OnInit {
   aApellido : string = "";
   aEmail : string = "";
 
+  cliente : Cliente = new Cliente();
 
-  constructor(){ }
+
+  constructor(private clienteServie : ClienteService,
+    private router : Router
+    ){ }
 
   ngOnInit() {
     
@@ -21,6 +28,9 @@ export class FormComponent implements OnInit {
   public guardar() : void{
 
     console.log("Método Llamado");
+    this.clienteServie.crear(this.cliente).subscribe(
+      response => this.router.navigate(['/clientes'])
+    )
   }
 
 

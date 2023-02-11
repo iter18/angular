@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 import { CLIENTES } from './clientes.json';
 import {of, Observable, map } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 //Apartir de la versión 7 en adelante ya lo inyecta en el app.module.ts por debajo y por eso tiene el providedIn
@@ -16,6 +16,8 @@ import { HttpClient } from '@angular/common/http';
 export class ClienteService {
 
   private urlEndPoint : string = 'http://localhost:8080/api/clientes';
+
+  private httpHeaders = new HttpHeaders({'Content-Type' : 'application/json'});
 
   constructor(private http:HttpClient) { }
 
@@ -42,5 +44,9 @@ export class ClienteService {
       })
     );
   
+  }
+
+  crear(cliente : Cliente) : Observable<Cliente>{
+    return this.http.post<Cliente>(this.urlEndPoint,cliente,{headers : this.httpHeaders})
   }
 }

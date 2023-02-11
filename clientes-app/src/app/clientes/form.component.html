@@ -1,3 +1,8 @@
+<!--
+    Si se tiene una clase representada por entidad en angular se puede mapear colocando en ngModel = nombre de la entida definida seguida del nombre del atributo
+    Ej:
+    cliente.nombre
+-->
 <div class="card bg-dark text-white">
   <div class="card-header">{{ titulo }}</div>
   <div class="card-body">
@@ -8,34 +13,34 @@
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="aNombre"
+            [(ngModel)]="cliente.nombre"
             name="nombre"
           />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row my-2">
         <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
         <div class="col-sm-6">
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="aApellido"
+            [(ngModel)]="cliente.apellido"
             name="apellido"
           />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row my-2">
         <label for="email" class="col-form-label col-sm-2">E-mail</label>
         <div class="col-sm-6">
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="aEmail"
+            [(ngModel)]="cliente.email"
             name="email"
           />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row my-2">
         <div class="col-sm-6">
           <button class="btn btn-primary" role="button" (click)="guardar()">
             Crear
