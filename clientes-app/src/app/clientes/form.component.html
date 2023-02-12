@@ -42,9 +42,19 @@
       </div>
       <div class="form-group row my-2">
         <div class="col-sm-6">
-          <button class="btn btn-primary" role="button" (click)="guardar()">
+          <button
+            class="btn btn-primary"
+            role="button"
+            (click)="guardar()"
+            *ngIf="!cliente.id; else elseBlock"
+          >
             Crear
           </button>
+          <ng-template #elseBlock>
+            <button class="btn btn-primary" role="button" (click)="modificar()">
+              Editar
+            </button>
+          </ng-template>
         </div>
       </div>
     </form>

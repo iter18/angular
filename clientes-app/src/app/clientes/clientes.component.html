@@ -20,6 +20,7 @@
           <th>APELLIDO</th>
           <th>EMAIL</th>
           <th>FECHA</th>
+          <th>ACCIONES</th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,7 @@
           <td>{{ cliente.apellido }}</td>
           <td>{{ cliente.email }}</td>
           <td>{{ cliente.createAt }}</td>
+          <td><button type="button" name="button" [routerLink]="['/clientes/form',cliente.id]" class="btn btn-primary">Editar</button></td>
         </tr>
       </tbody>
     </table>
