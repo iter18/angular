@@ -55,38 +55,7 @@ export class FormComponent implements OnInit {
     })
   }
 
-  eliminar(cliente : Cliente) : void{
 
-    const swalWithBootstrapButtons = swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: false
-    })
-    
-    swalWithBootstrapButtons.fire({
-      title: 'Está seguro?',
-      text: `Seguro que desea eliminar el cliente ${cliente.nombre}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Si, eliminar!',
-      cancelButtonText: 'No, cancelar!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.clienteServie.delete(cliente.id).subscribe(
-          response => {
-            swalWithBootstrapButtons.fire(
-              'Eliminado!',
-              'El registro seleccionado ha sido borrado',
-              'success'
-            )
-          }
-        )
-      } 
-    })
-  }
 
 
 }
