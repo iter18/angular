@@ -41,7 +41,7 @@ export class ClienteService {
     // Se documenta ya que esta es una peticón de un archivo local return of (CLIENTES);
 
     return this.http.get<Cliente[]>(this.urlEndPoint).pipe(
-      map((response) => {
+      map(response => {
         return response as Cliente[]
       })
     );

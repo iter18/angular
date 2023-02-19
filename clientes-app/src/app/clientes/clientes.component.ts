@@ -1,5 +1,6 @@
 import { Component,OnInit } from '@angular/core';
 import { Cliente } from './cliente';
+import { formatDate,DatePipe } from '@angular/common';
 import { ClienteService } from './cliente.service';
 import swal from 'sweetalert2';
 
@@ -21,6 +22,14 @@ export class ClientesComponent implements OnInit{
       this.clientesService.getClientes().subscribe(
         (res : any) => {
           this.clientes = res.data;
+          this.clientes.map(cliente => {
+            cliente.nombre = cliente.nombre.toUpperCase();
+           //Forma de hacerlo con formDate 
+          // cliente.createAt = formatDate(cliente.createAt,'dd-MM-yyyy','en-US')
+           //let datePipe = new DatePipe('en-US');
+           //cliente.createAt = datePipe.transform(cliente.createAt,'dd/MM/yyyy');
+            return cliente;
+          })
         }
       );
     }
