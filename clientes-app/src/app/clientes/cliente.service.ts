@@ -70,7 +70,7 @@ export class ClienteService {
   //Se declara any para que la respuesta del observable sea más generico y en el método de envio web putd no se necesita especificar el tipo de objeto
   update(cliente : Cliente) : Observable<any>{
 
-    return this.http.put(`${this.urlEndPoint}/${cliente.id}`,cliente,{headers : this.httpHeaders}).pipe(
+    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`,cliente,{headers : this.httpHeaders}).pipe(
       catchError(e => {
         swal.fire('Error al modificar',e.error.mensaje,'error');
         return throwError(() => e);
