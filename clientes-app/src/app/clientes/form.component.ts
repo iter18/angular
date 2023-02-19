@@ -43,18 +43,18 @@ export class FormComponent implements OnInit {
 
     console.log("Método Llamado");
     this.clienteServie.crear(this.cliente).subscribe(
-      cliente => {
+      (res : any) => {
        
         this.router.navigate(['/clientes'])
-        swal.fire('Nuevo Cliente',`Cliente ${cliente.nombre} creado correctamente`,'success' )
+        swal.fire('Nuevo Cliente',`${res.mensaje} ${res.reg.nombre}`,'success' )
       }
     )
   }
 
   modificar() : void{
-    this.clienteServie.update(this.cliente).subscribe(cliente => {
+    this.clienteServie.update(this.cliente).subscribe(res => {
       this.router.navigate(['/clientes'])
-      swal.fire('Cliente Acutalizado', `Cliente ${cliente.nombre} actualizado con éxito!`, 'success')
+      swal.fire('Cliente Acutalizado', `${res.mensaje}`, 'success')
     })
   }
 

@@ -4,8 +4,10 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 import { CLIENTES } from './clientes.json';
-import {of, Observable, map } from 'rxjs';
+import {of, Observable, map,catchError,throwError} from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 //Apartir de la versión 7 en adelante ya lo inyecta en el app.module.ts por debajo y por eso tiene el providedIn
@@ -19,7 +21,7 @@ export class ClienteService {
 
   private httpHeaders = new HttpHeaders({'Content-Type' : 'application/json'});
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private router : Router) { }
 
    //Forma sincrona es decir esepra a que sea llamado el evento
 
@@ -47,20 +49,41 @@ export class ClienteService {
   }
 
   crear(cliente : Cliente) : Observable<Cliente>{
-    return this.http.post<Cliente>(this.urlEndPoint,cliente,{headers : this.httpHeaders})
+    return this.http.post<Cliente>(this.urlEndPoint,cliente,{headers : this.httpHeaders}).pipe(
+      catchError(e => {
+        swal.fire('Error al crear el cliente',e.error.mensaje,'error');
+        return throwError(() => e);
+      })
+    )
   }
 
   getCliente(id: any) : Observable<Cliente>{
-
-      return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`)
+      
+      return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
+        catchError(e =>{
+          this.router.navigate(['/clientes']); 
+          swal.fire('Error al buscar el registro', e.error.mensaje,'error');
+          return throwError(() => e);
+        })
+      )
   }
+  //Se declara any para que la respuesta del observable sea más generico y en el método de envio web putd no se necesita especificar el tipo de objeto
+  update(cliente : Cliente) : Observable<any>{
 
-  update(cliente : Cliente) : Observable<Cliente>{
-
-    return this.http.put<Cliente>(`${this.urlEndPoint}/${cliente.id}`,cliente,{headers : this.httpHeaders})
+    return this.http.put(`${this.urlEndPoint}/${cliente.id}`,cliente,{headers : this.httpHeaders}).pipe(
+      catchError(e => {
+        swal.fire('Error al modificar',e.error.mensaje,'error');
+        return throwError(() => e);
+      })
+    )
   }
 
   delete(id : any) : Observable<Cliente>{
-    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`,{headers : this.httpHeaders})
+    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`,{headers : this.httpHeaders}).pipe(
+      catchError(e => {
+        swal.fire('Error al eliminar',e.error.mensaje,'error');
+        return throwError(() => e);
+      })
+    )
   }
 }
