@@ -15,6 +15,7 @@ import { RouterModule,Routes } from '@angular/router';
 import { HttpClientModule} from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './login.component';
 
 /**
  * Se declaran las rutas para navegar en este archivo y algunos elementos que lo componen son los sigueintes:
@@ -29,7 +30,7 @@ const routes : Routes = [
   //Esta primera ruta es para indicar que cuando no se coloque nada en la url el home sera /clientes
   {
     path : '',
-    redirectTo : '/clientes',
+    redirectTo : '/login',
     pathMatch : 'full'
   },
   {
@@ -47,6 +48,10 @@ const routes : Routes = [
   {
     path : 'clientes/form/:id',
     component : FormComponent
+  },
+  {
+    path : 'login',
+    component : LoginComponent
   }
 ];
 
@@ -58,7 +63,8 @@ const routes : Routes = [
     FooterComponent,
     DirectivaComponent,
     ClientesComponent,
-    FormComponent
+    FormComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
