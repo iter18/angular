@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private urlEndPoint : string = 'http://localhost:8080/api/';
+  private urlEndPoint : string = 'http://localhost:8080';
 
   constructor(public http:HttpClient,
               private router:Router) { }
@@ -24,6 +24,56 @@ export class AuthService {
                                                           'Access-Control-Allow-Headers' : 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding',
                                                           'Accept' : 'application/json'});
 
-                                                          return this.http.post<HttpResponse<Object>>(this.urlEndPoint+'login','',{headers : headersForSession, observe:'response',params : params, responseType:'json'})
+                return this.http.post<HttpResponse<Object>>(this.urlEndPoint+'/api/login','',{headers : headersForSession, observe:'response',params : params, responseType:'json'})
               }
-}
+              /**Servicio para operaciones GET */
+              procesaOperacionGet(uri : string, token : string, params : any) : Observable<HttpResponse<Object>>{
+                var headersApi = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded',
+                                                          'Accept' : 'application/json',
+                                                          'Cache-Control': 'no-cache',
+                                                          'Authorization' : token
+                                    });
+                let options = ({headers : headersApi, params : params});
+                
+                return this.http.get<Object>(this.urlEndPoint+uri,
+                  {headers: headersApi,observe: 'response', params : params, 
+                  reportProgress: true, responseType:'json', withCredentials : true})
+              }
+              /** Servicio para Operaciones Delete */
+              procesaOperacionDelete(uri : string, token : string, params : any) : Observable<HttpResponse<any>>{
+                var headersApi = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded',
+                                                          'Accept' : 'application/json',
+                                                          'Cache-Control': 'no-cache',
+                                                          'Authorization' : token});
+                return this.http.delete<any>(this.urlEndPoint+uri,
+                                            {headers: headersApi,observe: 'response', params : params, 
+                                            reportProgress: true, responseType:'json', withCredentials : true})
+              } 
+              /** Servicio para operaciones PUT */
+              /** NOTA: Content-Type':'application/json -> se especifica cuando se va a trabajar con objetos json y se envian peticiones 
+               *                      mediante el body,
+               *        Content-Type' : application/x-www-form-urlencoded -> se usa cuando se va trabajar con URL y se envian peticiones mediante la url
+                */
+              procesaOperacionPut(uri : string, token : string, body : any) : Observable<HttpResponse<any>>{
+                          var headersApi = new HttpHeaders({'Content-Type':'application/json',
+                          'Accept' : 'application/json',
+                          'Cache-Control': 'no-cache',
+                          'Authorization' : token});
+                   return this.http.put<any>(this.urlEndPoint+uri,
+                                            body,
+                                            {headers: headersApi,observe: 'response', 
+                                            reportProgress: true, responseType:'json', withCredentials : true})     
+              }
+
+              /** Servicio para Operaciones POST */
+              procesaOperacionPost(uri : string, token : string, body : any) : Observable<HttpResponse<any>>{
+                var headersApi = new HttpHeaders({'Content-Type':'application/json',
+                          'Accept' : 'application/json',
+                          'Cache-Control': 'no-cache',
+                          'Authorization' : token});
+                          return this.http.post<any>(this.urlEndPoint+uri,
+                            body,{headers:headersApi,observe:'response',
+                            reportProgress:true,responseType:'json',withCredentials:true})
+
+              }
+} 
