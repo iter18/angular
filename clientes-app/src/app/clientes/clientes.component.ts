@@ -5,7 +5,7 @@ import { ClienteService } from './cliente.service';
 import { AuthService } from '../app.service';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams,HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -51,9 +51,10 @@ export class ClientesComponent implements OnInit{
           this.clientes = res.body.data;
           console.log("res data:"+res.data);
         }
-        if(res.status == 500){
-         console.log("hola");
-        }
+      },(err:HttpErrorResponse)=>{
+        this.router.navigate(['/clientes']); 
+        swal.fire('Error al crear el cliente',this.authService.msgDecripcion,'error');
+    
       });
     }
 
@@ -125,6 +126,10 @@ export class ClientesComponent implements OnInit{
                   'success'
                 )
               }
+            },(err:HttpErrorResponse)=>{
+              this.router.navigate(['/clientes']); 
+              swal.fire('Error al crear el cliente',this.authService.msgDecripcion,'error');
+          
             }
           )
         } 

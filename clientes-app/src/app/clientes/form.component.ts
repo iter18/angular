@@ -4,6 +4,7 @@ import { ClienteService } from './cliente.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { AuthService } from '../app.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-form',
@@ -36,8 +37,13 @@ export class FormComponent implements OnInit {
       let id = params['id']
       if(id){
         this.authService.procesaOperacionGet("/api/clientes/"+id,this.webToken,'').subscribe((res : any ) => {
-              
-            this.cliente = res.body.reg;
+             if(res.status == 200){
+              this.cliente = res.body.reg;
+             } 
+             
+          },(err:HttpErrorResponse)=>{
+            this.router.navigate(['/clientes']); 
+            swal.fire('Error al buscar el registro', this.authService.msgDecripcion,'error');
           })
       }
     })
@@ -61,8 +67,11 @@ export class FormComponent implements OnInit {
     let body :any=[];
     body = this.cliente;
     this.authService.procesaOperacionPost('/api/clientes',this.webToken,JSON.stringify(body)).subscribe((res:any)=>{
+      if(res.status==201){
         this.router.navigate(['/clientes'])
-        swal.fire('Nuevo Cliente', `${res.body.mensaje} ${res.body.nombre}`,'success')
+        swal.fire('Nuevo Cliente', `${res.body.mensaje} ${res.body.reg.nombre}`,'success')
+      }
+
     });
   } 
 
@@ -86,8 +95,17 @@ export class FormComponent implements OnInit {
     let body : any = [];
     body = this.cliente;
     this.authService.procesaOperacionPut("/api/clientes/"+this.cliente.id,this.webToken,JSON.stringify(body)).subscribe(res => {
-      this.router.navigate(['/clientes'])
-      swal.fire('Cliente Acutalizado', `${res.body.mensaje}`, 'success')
+      
+      if(res.status == 201){
+        
+        this.router.navigate(['/clientes'])
+        swal.fire('Cliente Acutalizado', `${res.body.mensaje}`, 'success')
+      }
+      
+    },(err:HttpErrorResponse)=>{
+      this.router.navigate(['/clientes']); 
+      swal.fire('Error al crear el cliente',this.authService.msgDecripcion,'error');
+  
     })
   }
 

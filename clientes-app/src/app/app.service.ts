@@ -11,6 +11,7 @@ import { Observable,catchError,throwError, switchMap, of } from 'rxjs';
 export class AuthService {
 
   private urlEndPoint : string = 'http://localhost:8080';
+  msgDecripcion : string = "";
 
   constructor(public http:HttpClient,
               private router:Router) { }
@@ -32,7 +33,10 @@ export class AuthService {
                       this.router.navigate(['login']);
                   }
                 }
-                return throwError(error);
+                if(error.status == 409){
+                    this.msgDecripcion = error.error.mensaje;
+                }
+                return throwError(()=> error);
               }));
               }
               /**Servicio para operaciones GET */
@@ -53,10 +57,10 @@ export class AuthService {
                         this.router.navigate(['login']);
                     }
                   }
-                  if(error.status == 403){
-
+                  if(error.status == 409){
+                      this.msgDecripcion = error.error.mensaje;
                   }
-                  return throwError(()=> new Error(""+error+""));
+                  return throwError(()=> error);
                 }));
               }
               /** Servicio para Operaciones Delete */
@@ -67,7 +71,18 @@ export class AuthService {
                                                           'Authorization' : token});
                 return this.http.delete<any>(this.urlEndPoint+uri,
                                             {headers: headersApi,observe: 'response', params : params, 
-                                            reportProgress: true, responseType:'json', withCredentials : true})
+                                            reportProgress: true, responseType:'json', withCredentials : true
+                }).pipe(catchError((error:HttpErrorResponse)=>{
+                  if(error.status == 500){
+                    if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                        this.router.navigate(['login']);
+                    }
+                  }
+                  if(error.status == 409){
+                      this.msgDecripcion = error.error.mensaje;
+                  }
+                  return throwError(()=> error);
+                }));
               } 
               /** Servicio para operaciones PUT */
               /** NOTA: Content-Type':'application/json -> se especifica cuando se va a trabajar con objetos json y se envian peticiones 
@@ -82,7 +97,18 @@ export class AuthService {
                    return this.http.put<any>(this.urlEndPoint+uri,
                                             body,
                                             {headers: headersApi,observe: 'response', 
-                                            reportProgress: true, responseType:'json', withCredentials : true})     
+                                            reportProgress: true, responseType:'json', withCredentials : true
+                  }).pipe(catchError((error:HttpErrorResponse)=>{
+                    if(error.status == 500){
+                      if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                          this.router.navigate(['login']);
+                      }
+                    }
+                    if(error.status == 409){
+                        this.msgDecripcion = error.error.mensaje;
+                    }
+                    return throwError(()=> error);
+                  }));     
               }
 
               /** Servicio para Operaciones POST */
@@ -93,7 +119,18 @@ export class AuthService {
                           'Authorization' : token});
                           return this.http.post<any>(this.urlEndPoint+uri,
                             body,{headers:headersApi,observe:'response',
-                            reportProgress:true,responseType:'json',withCredentials:true})
+                            reportProgress:true,responseType:'json',withCredentials:true
+                          }).pipe(catchError((error:HttpErrorResponse)=>{
+                            if(error.status == 500){
+                              if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                                  this.router.navigate(['login']);
+                              }
+                            }
+                            if(error.status == 409){
+                                this.msgDecripcion = error.error.mensaje;
+                            }
+                            return throwError(()=> error);
+                          }));
 
               }
 } 
