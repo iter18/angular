@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse,HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable,catchError,throwError, switchMap, of } from 'rxjs';
+
 
 
 @Injectable({
@@ -24,7 +25,15 @@ export class AuthService {
                                                           'Access-Control-Allow-Headers' : 'X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding',
                                                           'Accept' : 'application/json'});
 
-                return this.http.post<HttpResponse<Object>>(this.urlEndPoint+'/api/login','',{headers : headersForSession, observe:'response',params : params, responseType:'json'})
+                return this.http.post<HttpResponse<Object>>(this.urlEndPoint+'/api/login','',{headers : headersForSession, observe:'response',params : params, responseType:'json'
+              }).pipe(catchError((error:HttpErrorResponse)=>{
+                if(error.status == 500){
+                  if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                      this.router.navigate(['login']);
+                  }
+                }
+                return throwError(error);
+              }));
               }
               /**Servicio para operaciones GET */
               procesaOperacionGet(uri : string, token : string, params : any) : Observable<HttpResponse<Object>>{
@@ -37,7 +46,18 @@ export class AuthService {
                 
                 return this.http.get<Object>(this.urlEndPoint+uri,
                   {headers: headersApi,observe: 'response', params : params, 
-                  reportProgress: true, responseType:'json', withCredentials : true})
+                  reportProgress: true, responseType:'json', withCredentials : true
+                }).pipe(catchError((error:HttpErrorResponse)=>{
+                  if(error.status == 500){
+                    if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                        this.router.navigate(['login']);
+                    }
+                  }
+                  if(error.status == 403){
+
+                  }
+                  return throwError(()=> new Error(""+error+""));
+                }));
               }
               /** Servicio para Operaciones Delete */
               procesaOperacionDelete(uri : string, token : string, params : any) : Observable<HttpResponse<any>>{

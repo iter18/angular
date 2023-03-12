@@ -51,6 +51,9 @@ export class ClientesComponent implements OnInit{
           this.clientes = res.body.data;
           console.log("res data:"+res.data);
         }
+        if(res.status == 500){
+         console.log("hola");
+        }
       });
     }
 

@@ -12,10 +12,12 @@ import { FooterComponent } from './footer/footer.component';
 import { DirectivaComponent } from './directiva/directiva.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { RouterModule,Routes } from '@angular/router';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
+//import { JwtInterceptor } from './jwt-interceptor';
+
 
 /**
  * Se declaran las rutas para navegar en este archivo y algunos elementos que lo componen son los sigueintes:
@@ -75,6 +77,7 @@ const routes : Routes = [
     //registramos las rutas
     RouterModule.forRoot(routes)
   ],
+  //providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],
   providers: [],
   bootstrap: [AppComponent]
 })
