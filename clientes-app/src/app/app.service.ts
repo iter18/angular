@@ -34,7 +34,8 @@ export class AuthService {
                   }
                 }
                 if(error.status == 409){
-                    this.msgDecripcion = error.error.mensaje;
+                   // this.msgDecripcion = error.error.mensaje;
+                   this.msgDecripcion = error.error;
                 }
                 return throwError(()=> error);
               }));
@@ -52,13 +53,17 @@ export class AuthService {
                   {headers: headersApi,observe: 'response', params : params, 
                   reportProgress: true, responseType:'json', withCredentials : true
                 }).pipe(catchError((error:HttpErrorResponse)=>{
-                  if(error.status == 500){
+                  if(error.status == 401){
                     if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
                         this.router.navigate(['login']);
                     }
                   }
                   if(error.status == 409){
-                      this.msgDecripcion = error.error.mensaje;
+                          //SE usua cuando se usa un map del lado del backend ->this.msgDecripcion = error.error.mensaje;
+                          this.msgDecripcion = error.error;
+                  }
+                  if(error.status == 403){
+                    this.msgDecripcion = "Acceso denegado al recurso solicitado"
                   }
                   return throwError(()=> error);
                 }));
@@ -79,7 +84,11 @@ export class AuthService {
                     }
                   }
                   if(error.status == 409){
-                      this.msgDecripcion = error.error.mensaje;
+                      //this.msgDecripcion = error.error.mensaje;
+                      this.msgDecripcion = error.error;
+                  }
+                  if(error.status == 403){
+                    this.msgDecripcion = "Acceso denegado al recurso solicitado"
                   }
                   return throwError(()=> error);
                 }));
@@ -105,7 +114,12 @@ export class AuthService {
                       }
                     }
                     if(error.status == 409){
-                        this.msgDecripcion = error.error.mensaje;
+                       
+                      //SE usua cuando se usa un map del lado del backend ->this.msgDecripcion = error.error.mensaje;
+                      this.msgDecripcion = error.error;
+                    }
+                    if(error.status == 403){
+                      this.msgDecripcion = "Acceso denegado al recurso solicitado"
                     }
                     return throwError(()=> error);
                   }));     
@@ -127,7 +141,11 @@ export class AuthService {
                               }
                             }
                             if(error.status == 409){
-                                this.msgDecripcion = error.error.mensaje;
+                               // this.msgDecripcion = error.error.mensaje;
+                               this.msgDecripcion = error.error;
+                            }
+                            if(error.status == 403){
+                              this.msgDecripcion = "Acceso denegado al recurso solicitado"
                             }
                             return throwError(()=> error);
                           }));

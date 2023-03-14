@@ -45,16 +45,20 @@ export class ClientesComponent implements OnInit{
         }
       );*/
 
-      this.authService.procesaOperacionGet('/api/clientes',this.webToken,'').subscribe((res:any) => {
-        console.log("res data:"+res.body.data);
-        if(res.status==200){
-          this.clientes = res.body.data;
-          console.log("res data:"+res.data);
+      this.authService.procesaOperacionGet('/api/clientes',this.webToken,'').subscribe({
+        next:(res:any) =>{
+          if(res.status==200){
+            //this.clientes = res.body.data;
+            this.clientes = res.body;
+          }
+        },
+        error:(err:HttpErrorResponse)=>{
+          if(err.status==401){
+            swal.fire('La sesión ha caducado o se reincio el servidor',this.authService.msgDecripcion,'error');
+            this.router.navigate(['login']);
+          }
+          //swal.fire('Error: ',this.authService.msgDecripcion,'error');
         }
-      },(err:HttpErrorResponse)=>{
-        this.router.navigate(['/clientes']); 
-        swal.fire('Error al crear el cliente',this.authService.msgDecripcion,'error');
-    
       });
     }
 
@@ -116,20 +120,20 @@ export class ClientesComponent implements OnInit{
           /* Para agregar parametros a la peticion
           var params = new HttpParams();
           params = params.append("id",reg.id);*/
-          this.authService.procesaOperacionDelete('/api/clientes/'+reg.id,this.webToken,'').subscribe(
-            (response : any) => {
-              if(response.status == 204){
-                this.clientes = this.clientes.filter(cli => cli !== reg)
-                swalWithBootstrapButtons.fire(
-                  'Eliminado!',
-                  'El registro seleccionado ha sido borrado',
-                  'success'
-                )
+          this.authService.procesaOperacionDelete('/api/clientes/'+reg.id,this.webToken,'').subscribe({
+              next:(response : any) =>{
+                if(response.status == 204){
+                  this.clientes = this.clientes.filter(cli => cli !== reg)
+                  swalWithBootstrapButtons.fire(
+                    'Eliminado!',
+                    'El registro seleccionado ha sido borrado',
+                    'success'
+                  )
+                }
+              },
+              error:(err:HttpErrorResponse)=>{
+                swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
               }
-            },(err:HttpErrorResponse)=>{
-              this.router.navigate(['/clientes']); 
-              swal.fire('Error al crear el cliente',this.authService.msgDecripcion,'error');
-          
             }
           )
         } 

@@ -38,12 +38,12 @@ export class FormComponent implements OnInit {
       if(id){
         this.authService.procesaOperacionGet("/api/clientes/"+id,this.webToken,'').subscribe((res : any ) => {
              if(res.status == 200){
-              this.cliente = res.body.reg;
+              this.cliente = res.body;
              } 
              
           },(err:HttpErrorResponse)=>{
             this.router.navigate(['/clientes']); 
-            swal.fire('Error al buscar el registro', this.authService.msgDecripcion,'error');
+            swal.fire('Error en la operación', this.authService.msgDecripcion,'error');
           })
       }
     })
@@ -66,12 +66,18 @@ export class FormComponent implements OnInit {
 
     let body :any=[];
     body = this.cliente;
-    this.authService.procesaOperacionPost('/api/clientes',this.webToken,JSON.stringify(body)).subscribe((res:any)=>{
-      if(res.status==201){
-        this.router.navigate(['/clientes'])
-        swal.fire('Nuevo Cliente', `${res.body.mensaje} ${res.body.reg.nombre}`,'success')
+    this.authService.procesaOperacionPost('/api/clientes',this.webToken,JSON.stringify(body)).subscribe({
+      next:(res:any)=>{
+        if(res.status==201){
+          this.router.navigate(['/clientes'])
+         // swal.fire('Nuevo Cliente', `${res.body.mensaje} ${res.body.reg.nombre}`,'success')
+         swal.fire('Nuevo Cliente', `Cliente creado con éxito ${res.body.nombre}`,'success')
+        }
+      },
+      error:(err:HttpErrorResponse)=>{
+        this.router.navigate(['/clientes']); 
+        swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
       }
-
     });
   } 
 
@@ -94,18 +100,20 @@ export class FormComponent implements OnInit {
     
     let body : any = [];
     body = this.cliente;
-    this.authService.procesaOperacionPut("/api/clientes/"+this.cliente.id,this.webToken,JSON.stringify(body)).subscribe(res => {
-      
-      if(res.status == 201){
+    this.authService.procesaOperacionPut("/api/clientes/"+this.cliente.id,this.webToken,JSON.stringify(body)).subscribe({
+      next:(res:any) =>{
+        if(res.status == 201){
         
-        this.router.navigate(['/clientes'])
-        swal.fire('Cliente Acutalizado', `${res.body.mensaje}`, 'success')
-      }
-      
-    },(err:HttpErrorResponse)=>{
-      this.router.navigate(['/clientes']); 
-      swal.fire('Error al crear el cliente',this.authService.msgDecripcion,'error');
-  
+          this.router.navigate(['/clientes'])
+          //swal.fire('Cliente Acutalizado', `${res.body.mensaje}`, 'success')
+          swal.fire('Cliente Acutalizado', 'Registro modificado éxitosamente', 'success')
+        }
+      },
+      error:(err:HttpErrorResponse)=>{
+        this.router.navigate(['/clientes']); 
+        swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
+    
+      } 
     })
   }
 
