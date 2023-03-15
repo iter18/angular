@@ -14,7 +14,7 @@ export class FormComponent implements OnInit {
 
   titulo : string = "Alta de clientes";
   webToken : any; 
-
+  isAdmin : boolean = false;
   cliente : any = {};
 
 
@@ -29,6 +29,7 @@ export class FormComponent implements OnInit {
     if(this.webToken === ""|| this.webToken === null){
       this.router.navigate(['login'])
     }
+    this.isAdmin = this.authService.hasRole("ROLE_ADMIN");
     this.cargarCliente()
   }
 

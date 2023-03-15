@@ -3,7 +3,7 @@
   <div class="card-body text-primary">
     <h5 class="card-title">Listado de clientes</h5>
 
-    <div class="my-2 text-left">
+    <div class="my-2 text-left" *ngIf="isAdmin">
       <button
         class="btn btn-rounded btn-primary"
         [routerLink]="['/clientes/form']"
@@ -26,7 +26,7 @@
           <th>APELLIDO</th>
           <th>EMAIL</th>
           <th>FECHA</th>
-          <th>ACCIONES</th>
+          <th *ngIf="isAdmin">ACCIONES</th>
         </tr>
       </thead>
       <tbody>
@@ -36,7 +36,7 @@
           <td>{{ cliente.apellido | uppercase }}</td>
           <td>{{ cliente.email }}</td>
           <td>{{ cliente.fechaCreacion | date : "EEEE dd, MMMM yyyy" }}</td>
-          <td>
+          <td *ngIf="isAdmin">
             <button
               type="button"
               name="button"

@@ -15,6 +15,7 @@ import { HttpParams,HttpErrorResponse } from '@angular/common/http';
 export class ClientesComponent implements OnInit{
 
  webToken : any;
+ isAdmin : boolean = false;
 
   clientes : any[]=[];
     constructor(private clientesService : ClienteService,
@@ -50,6 +51,7 @@ export class ClientesComponent implements OnInit{
           if(res.status==200){
             //this.clientes = res.body.data;
             this.clientes = res.body;
+            this.isAdmin = this.authService.hasRole("ROLE_ADMIN");
           }
         },
         error:(err:HttpErrorResponse)=>{

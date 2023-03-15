@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit{
   username : string= "";
   password : string = "";
   token : any;
+  authorities :String[] = [];
   constructor(private router : Router,
     private authService:AuthService){}
   
@@ -25,7 +26,9 @@ export class LoginComponent implements OnInit{
        
       if(data.status == 200){
         this.token = data.headers.get("Authorization");
-        console.log("token: "+this.token);
+        this.authorities = data.body.user.authorities.map((role:any)=> role.authority);
+;
+          sessionStorage.setItem('roles',JSON.stringify(this.authorities));
           sessionStorage.setItem('tokenB',this.token);
           console.log("token de Session: "+sessionStorage.getItem('tokenB'));
           this.router.navigate(['clientes'])

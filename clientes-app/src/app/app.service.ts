@@ -12,6 +12,7 @@ export class AuthService {
 
   private urlEndPoint : string = 'http://localhost:8080';
   msgDecripcion : string = "";
+  roles : string[] = [];
 
   constructor(public http:HttpClient,
               private router:Router) { }
@@ -150,5 +151,12 @@ export class AuthService {
                             return throwError(()=> error);
                           }));
 
+              }
+
+              hasRole(role:string):boolean{
+                //con esta validacion aseguramos que el valor sea un string aunque el valor de rol este vacio
+                const rolesForSession = sessionStorage.getItem('roles')||'';
+                this.roles = JSON.parse(rolesForSession);
+                return this.roles.includes(role);
               }
 } 
