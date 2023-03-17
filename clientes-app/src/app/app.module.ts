@@ -16,6 +16,7 @@ import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
+import { AppRoutingModule } from './app-routing.module';
 //import { JwtInterceptor } from './jwt-interceptor';
 
 
@@ -28,14 +29,14 @@ import { LoginComponent } from './login.component';
  * pathMatch : "full" <-el pathMatch en conbinación con el full indica que se cargara el contenido de manera compleata 
  */
 
-const routes : Routes = [
+/*const routes : Routes = [
   //Esta primera ruta es para indicar que cuando no se coloque nada en la url el home sera /clientes
   {
     path : '',
     redirectTo : '/login',
     pathMatch : 'full'
   },
-  {
+ {
     path : 'directivas',
     component : DirectivaComponent
   },
@@ -55,7 +56,7 @@ const routes : Routes = [
     path : 'login',
     component : LoginComponent
   }
-];
+];*/
 
 
 @NgModule({
@@ -63,9 +64,9 @@ const routes : Routes = [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    DirectivaComponent,
-    ClientesComponent,
-    FormComponent,
+    //DirectivaComponent,
+    //ClientesComponent,
+    //FormComponent,
     LoginComponent
   ],
   imports: [
@@ -75,7 +76,8 @@ const routes : Routes = [
     //Libreria para trabajar con formularios
     FormsModule,
     //registramos las rutas
-    RouterModule.forRoot(routes)
+    //Rutas dinamicas
+    AppRoutingModule
   ],
   //providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],
   providers: [],
