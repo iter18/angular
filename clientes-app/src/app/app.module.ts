@@ -17,6 +17,8 @@ import { FormComponent } from './clientes/form.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
 import { AppRoutingModule } from './app-routing.module';
+import { LibroComponent } from './libro/libro.component';
+import { AutoresComponent } from './autores/autores.component';
 //import { JwtInterceptor } from './jwt-interceptor';
 
 
@@ -27,6 +29,8 @@ import { AppRoutingModule } from './app-routing.module';
  * component: "Nombre del componente al que hará referencia "
  * redirectTo: "A donde queremos que redirija cuando ingresen a cierta url"
  * pathMatch : "full" <-el pathMatch en conbinación con el full indica que se cargara el contenido de manera compleata 
+ * 
+ * SE COMENTA POR QUE SE USA APP-ROUTING.MODULE PARA QUE SEA DE MANERA PERESOSA Y CARGUE LA RUTA CUANDO SEA LLAMADA Y NO DESDE INICIO
  */
 
 /*const routes : Routes = [
@@ -79,7 +83,6 @@ import { AppRoutingModule } from './app-routing.module';
     //Rutas dinamicas
     AppRoutingModule
   ],
-  //providers: [{provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],
   providers: [],
   bootstrap: [AppComponent]
 })

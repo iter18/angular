@@ -6,8 +6,8 @@ import { LoginComponent } from './login.component';
 const routes: Routes =[
     {path : '',redirectTo : '/login',pathMatch : 'full'},
     {path : 'login',component : LoginComponent},
-    {path : 'clientes',loadChildren:()=> import('./clientes/clientes-routing.module').then(c=>c.ClientesRoutingModule)}
-
+    {path : 'clientes',loadChildren:()=> import('./clientes/clientes-routing.module').then(c=>c.ClientesRoutingModule)},
+    {path : 'autores',loadChildren:()=> import('./autores/autores-routing.module').then(a=>a.AutoresRoutingModule)}
 ];
 
 
