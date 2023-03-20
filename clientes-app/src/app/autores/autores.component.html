@@ -39,9 +39,9 @@
                   class="spinner-border spinner-border-sm spinnerB"
                   role="status"
                   aria-hidden="true"
-                  style="display: none"
+                  *ngIf="spinnerLoad"
                 ></span>
-                <span class="sr-only spinnerB" style="display: none"
+                <span class="sr-only spinnerB" *ngIf="spinnerLoad"
                   >Enviando...</span
                 >
                 <span id="txtCrear">Crear</span>
@@ -110,7 +110,13 @@
             </th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <tr *ngFor="let autor of listaAutores">
+            <td>{{ autor.id }}</td>
+            <td>{{ autor.nombre }}</td>
+            <td>{{ autor.apellido }}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

@@ -22,6 +22,8 @@ export class AutoresComponent implements OnInit{
   pnBuscar: boolean = true;
   waitResponse:boolean=false;
   webToken : any; 
+  spinnerLoad : boolean = false;
+  listaAutores : any[] = [];
 
   constructor(
     private authService : AuthService,
@@ -35,8 +37,27 @@ export class AutoresComponent implements OnInit{
     if(this.webToken === ""|| this.webToken === null){
       this.router.navigate(['login'])
     }
+    this.onBuscar();
     
   }
+
+  //funcion para obtener una lista de autores
+  onBuscar() : void{
+    this.authService.procesaOperacionGet('/api/autores',this.webToken,'').subscribe({
+      next:(data:any)=>{
+        if(data.status==200){
+          this.listaAutores = data.body;
+          console.log(this.listaAutores)
+        }
+
+      },
+      error:(err:HttpErrorResponse)=>{
+
+      }
+    });
+  }
+
+
   //Función para llamar form de crear
   onNuevo():void{
     this.nombreA="";
@@ -46,28 +67,38 @@ export class AutoresComponent implements OnInit{
       this.pnAlta = true
     });
   }
-//Funcion
+//Funcion para guardar un registro autor
   onGuardar():void{
     //this.formComponent.nombre
     console.log("NOMBRE:{}",this.formComponent.nombre)
     this.waitResponse=true;
     $("#txtCrear").fadeOut(()=>{
+      this.spinnerLoad = true
       $(".spinnerB").fadeIn()
     })
    
-    let body : {nombreAutor:string,apellidoAutor:string} = {nombreAutor:'',apellidoAutor:''}
-    body.nombreAutor = this.formComponent.nombre.trim();
-    body.apellidoAutor = this.formComponent.apellido.trim();
+    let body : {nombre:string,apellido:string} = {nombre:'',apellido:''}
+    body.nombre = this.formComponent.nombre.trim();
+    body.apellido = this.formComponent.apellido.trim();
     this.authService.procesaOperacionPost('/api/autores',this.webToken,JSON.stringify(body)).subscribe({
       next:(res:any)=>{
-
+        if(res.status == 201){
+          setTimeout(() => {
+            this.waitResponse=false;
+            $(".spinnerB").fadeOut(()=>{
+              $("#txtCrear").fadeIn()
+              this.spinnerLoad = false
+            })
+          }, 1000);
+        }
+        this.listaAutores.push(res.body)
       },
       error:(err:HttpErrorResponse)=>{
 
       }
     })
   }
-
+  //Función para reset los panel a origen
   onReset(panel:String):void{
     $("#"+panel).fadeOut(()=>{
       this.pnAlta= false;
