@@ -9,16 +9,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { DirectivaComponent } from './directiva/directiva.component';
-import { ClientesComponent } from './clientes/clientes.component';
+//import { DirectivaComponent } from './directiva/directiva.component';
+//import { ClientesComponent } from './clientes/clientes.component';
 import { RouterModule,Routes } from '@angular/router';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormComponent } from './clientes/form.component';
+//import { FormComponent } from './clientes/form.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LibroComponent } from './libro/libro.component';
-import { AutoresComponent } from './autores/autores.component';
+//import { LibroComponent } from './libro/libro.component';
+//import { AutoresComponent } from './autores/autores.component';
 //import { JwtInterceptor } from './jwt-interceptor';
 
 

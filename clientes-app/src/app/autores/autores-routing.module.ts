@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AutoresComponent } from './autores.component';
 import { FormsModule } from '@angular/forms';
+import { FormComponent } from './form.component';
 
 
 const routes : Routes = [
@@ -10,7 +11,7 @@ const routes : Routes = [
 ];
 
 @NgModule({
-  declarations: [AutoresComponent],
+  declarations: [AutoresComponent,FormComponent],
   imports: [
     CommonModule,
     FormsModule,
