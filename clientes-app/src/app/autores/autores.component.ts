@@ -3,6 +3,7 @@ import { Component, OnInit,ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../app.service';
 import { FormComponent } from './form.component';
+import swal from 'sweetalert2';
 
 
 
@@ -70,19 +71,36 @@ export class AutoresComponent implements OnInit{
 //Funcion para guardar un registro autor
   onGuardar():void{
     //this.formComponent.nombre
-    console.log("NOMBRE:{}",this.formComponent.nombre)
-    this.waitResponse=true;
-    $("#txtCrear").fadeOut(()=>{
-      this.spinnerLoad = true
-      $(".spinnerB").fadeIn()
-    })
-   
-    let body : {nombre:string,apellido:string} = {nombre:'',apellido:''}
-    body.nombre = this.formComponent.nombre.trim();
-    body.apellido = this.formComponent.apellido.trim();
-    this.authService.procesaOperacionPost('/api/autores',this.webToken,JSON.stringify(body)).subscribe({
-      next:(res:any)=>{
-        if(res.status == 201){
+    this.nombreA = this.formComponent.nombre.trim();
+    this.apellidoA = this.formComponent.apellido.trim();
+    if(this.nombreA == "" || this.apellidoA == ""){
+      swal.fire('Campos obligatorios:','Nombre y Apellido','error');
+    }else{
+      this.waitResponse=true;
+      $("#txtCrear").fadeOut(()=>{
+        this.spinnerLoad = true
+        $(".spinnerB").fadeIn();
+      })
+     
+      let body : {nombre:string,apellido:string} = {nombre:'',apellido:''}
+      body.nombre =this.nombreA.trim();
+      body.apellido = this.apellidoA.trim();
+      this.authService.procesaOperacionPost('/api/autores',this.webToken,JSON.stringify(body)).subscribe({
+        next:(res:any)=>{
+          if(res.status == 201){
+            swal.fire('Nuevo registro', `Autor creado con éxito ${res.body.nombre}`,'success')
+            setTimeout(() => {
+              this.waitResponse=false;
+              $(".spinnerB").fadeOut(()=>{
+                $("#txtCrear").fadeIn()
+                this.spinnerLoad = false
+              
+              })
+              this.listaAutores.push(res.body)
+            }, 1000);
+          }
+        },
+        error:(err:HttpErrorResponse)=>{
           setTimeout(() => {
             this.waitResponse=false;
             $(".spinnerB").fadeOut(()=>{
@@ -90,13 +108,10 @@ export class AutoresComponent implements OnInit{
               this.spinnerLoad = false
             })
           }, 1000);
+          swal.fire('Error:', this.authService.msgDecripcion,'error');
         }
-        this.listaAutores.push(res.body)
-      },
-      error:(err:HttpErrorResponse)=>{
-
-      }
-    })
+      })
+    }
   }
   //Función para reset los panel a origen
   onReset(panel:String):void{

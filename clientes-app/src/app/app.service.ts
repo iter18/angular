@@ -31,7 +31,9 @@ export class AuthService {
               }).pipe(catchError((error:HttpErrorResponse)=>{
                 if(error.status == 500){
                   if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
-                      this.router.navigate(['login']);
+                    this.msgDecripcion = "La sesión ha expirado!";  
+                    this.router.navigate(['login']);
+                      
                   }
                 }
                 if(error.status == 409){
