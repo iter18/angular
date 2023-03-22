@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../app.service';
@@ -16,6 +16,7 @@ export class AutoresComponent implements OnInit{
   /**Para poder ocupaar los componentes de otro es necesario  */
   @ViewChild(FormComponent) formComponent!: FormComponent;
 
+  nombreB: string = "";
   nombreA :string="";
   apellidoA:string="";
   nombreM :string= "";
@@ -44,7 +45,10 @@ export class AutoresComponent implements OnInit{
 
   //funcion para obtener una lista de autores
   onBuscar() : void{
-    this.authService.procesaOperacionGet('/api/autores',this.webToken,'').subscribe({
+
+    let p = new HttpParams();
+    p = p.append('nombreAutor',this.nombreB.trim());
+    this.authService.procesaOperacionGet('/api/autores',this.webToken,p).subscribe({
       next:(data:any)=>{
         if(data.status==200){
           this.listaAutores = data.body;
