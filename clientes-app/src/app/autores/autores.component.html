@@ -14,7 +14,9 @@
 
     <!--Fin panel alta-->
     <!--Panel para modificar-->
-
+    <div *ngIf="pnModificar" id="modificar">
+      <ng-container *ngTemplateOutlet="templateModificar"></ng-container>
+    </div>
     <!--fin panel modificar-->
   </div>
   <div class="card border-primary mb-3 mx-2">
@@ -30,15 +32,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let autor of listaAutores">
-            <td>{{ autor.id }}</td>
-            <td>{{ autor.nombre }}</td>
-            <td>{{ autor.apellido }}</td>
-            <ng-container
-              *ngTemplateOutlet="filaAutor; context: { $implicit: autor }"
-            >
-            </ng-container>
-          </tr>
+          <ng-container
+            *ngTemplateOutlet="filaAutor; context: { $implicit: listaAutores }"
+          ></ng-container>
         </tbody>
       </table>
     </div>
@@ -107,17 +103,17 @@
 </ng-template>
 <!--Fin template alta-->
 <!--Template modificar-->
-<ng-template #templateAlta>
+<ng-template #templateModificar>
   <div class="card bg-dark text-white mx-5">
-    <div class="card-header bg-primary">Registro nuevo autor</div>
+    <div class="card-header bg-primary">Modificar registro autor</div>
     <div class="card-body">
-      <app-form [nombre]="nombreA" [apellido]="apellidoA"></app-form>
+      <app-form [nombre]="nombreM" [apellido]="apellidoM"></app-form>
       <div class="form-group row my-2">
         <div class="col-sm-6">
           <button
             class="btn btn-primary mx-2"
             role="button"
-            (click)="onGuardar()"
+            (click)="onModificar()"
             [disabled]="waitResponse"
           >
             <span
@@ -129,12 +125,12 @@
             <span class="sr-only spinnerB" *ngIf="spinnerLoad"
               >Enviando...</span
             >
-            <span id="txtCrear">Crear</span>
+            <span id="txtCrear">Modificar</span>
           </button>
           <button
             class="btn btn-danger"
             role="button"
-            (click)="onReset('alta')"
+            (click)="onReset('modificar')"
           >
             Cancelar
           </button>
@@ -144,26 +140,33 @@
   </div>
 </ng-template>
 <!-- fin template modificar-->
-<!--Template para menu de opciones para registros-->
-<ng-template #filaAutor let-autor>
-  <td>
-    <div class="btn-group">
-      <button
-        class="btn btn-secondary btn-sm dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        Opciones
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a href="{{ autor.id }}" class="dropdown-item">Editar</a>
-        </li>
-        <li><a href="" class="dropdown-item">Eliminar</a></li>
-      </ul>
-    </div>
-  </td>
+<!--Template para registros en tabla-->
+<ng-template #filaAutor let-listaAutores>
+  <tr *ngFor="let autor of listaAutores; let i = index">
+    <td>{{ autor.id }}</td>
+    <td>{{ autor.nombre }}</td>
+    <td>{{ autor.apellido }}</td>
+    <td>
+      <div class="btn-group">
+        <button
+          class="btn btn-secondary btn-sm dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Opciones
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" (click)="onEditar(autor, i)">Editar</a>
+          </li>
+          <li>
+            <a class="dropdown-item" (click)="onEliminar(autor, i)">Eliminar</a>
+          </li>
+        </ul>
+      </div>
+    </td>
+  </tr>
 </ng-template>
 <!-- Fin de template menu opciones-->
 

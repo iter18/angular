@@ -20,12 +20,16 @@ export class AutoresComponent implements OnInit{
   nombreA :string="";
   apellidoA:string="";
   nombreM :string= "";
+  apellidoM : string = "";
   pnAlta : boolean=false;
+  pnModificar : boolean=false;
   pnBuscar: boolean = true;
   waitResponse:boolean=false;
   webToken : any; 
   spinnerLoad : boolean = false;
   listaAutores : any[] = [];
+  reg : any = null;
+  idx :number =0;
 
   constructor(
     private authService : AuthService,
@@ -45,7 +49,7 @@ export class AutoresComponent implements OnInit{
 
   //funcion para obtener una lista de autores
   onBuscar() : void{
-
+    this.listaAutores = [];
     let p = new HttpParams();
     p = p.append('nombreAutor',this.nombreB.trim());
     this.authService.procesaOperacionGet('/api/autores',this.webToken,p).subscribe({
@@ -70,6 +74,17 @@ export class AutoresComponent implements OnInit{
     $("#buscar").fadeOut(()=>{
       this.pnBuscar=false;
       this.pnAlta = true
+    });
+  }
+  //Funcion para llamar form/panel modificar
+  onEditar(reg:any,indice:number) : void {
+    this.nombreM=reg.nombre;
+    this.apellidoM=reg.apellido;
+    this.reg = reg;
+    this.idx=indice;
+    $("#buscar").fadeOut(()=>{
+      this.pnBuscar=false;
+      this.pnModificar = true;
     });
   }
 //Funcion para guardar un registro autor
@@ -117,10 +132,103 @@ export class AutoresComponent implements OnInit{
       })
     }
   }
+  //Funcion para modificar registro Autor
+  onModificar():void{
+    this.nombreM = this.formComponent.nombre;
+    this.apellidoM = this.formComponent.apellido;
+    if(this.nombreM == "" || this.apellidoM == ""){
+      swal.fire('Campos obligatorios:','Nombre y Apellido','error');
+      return;
+    }
+
+    const swalWithBootstrapButtons = swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Confirmación',
+      text: `Esta seguro de modificar este registro?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, modificar!',
+      cancelButtonText: 'No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let body : {nombre:string,apellido:string} = {nombre:'',apellido:''}
+        body.nombre =this.nombreM.trim();
+        body.apellido = this.apellidoM.trim();
+        this.authService.procesaOperacionPut('/api/autores/'+this.reg.id,this.webToken,JSON.stringify(body)).subscribe({
+            next:(response : any) =>{
+              if(response.status == 201){
+                this.listaAutores[this.idx] = response.body;
+                swalWithBootstrapButtons.fire(
+                  'Modificado!',
+                  'El registro seleccionado ha sido guardado',
+                  'success'
+                )
+               this.onReset("modificar"); 
+              }
+            },
+            error:(err:HttpErrorResponse)=>{
+              swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
+            }
+          }
+        )
+      } 
+    })
+    
+  }
+  //Función para eliminar registros de la tabla
+  onEliminar(reg:any, id:number) : void{
+
+    const swalWithBootstrapButtons = swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swalWithBootstrapButtons.fire({
+      title: 'Está seguro?',
+      text: `Seguro que desea eliminar el autor`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.authService.procesaOperacionDelete('/api/autores/'+reg.id,this.webToken,'').subscribe({
+            next:(response : any) =>{
+              if(response.status == 204){
+                this.listaAutores.splice(id,1);
+                swalWithBootstrapButtons.fire(
+                  'Eliminado!',
+                  'El registro seleccionado ha sido borrado',
+                  'success'
+                )
+              }
+            },
+            error:(err:HttpErrorResponse)=>{
+              swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
+            }
+          }
+        )
+      } 
+    })
+  }
   //Función para reset los panel a origen
   onReset(panel:String):void{
     $("#"+panel).fadeOut(()=>{
       this.pnAlta= false;
+      this.pnModificar= false;
       this.pnBuscar = true;
     })
   }
