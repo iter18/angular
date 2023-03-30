@@ -7,7 +7,8 @@ const routes: Routes =[
     {path : '',redirectTo : '/login',pathMatch : 'full'},
     {path : 'login',component : LoginComponent},
     {path : 'clientes',loadChildren:()=> import('./clientes/clientes-routing.module').then(c=>c.ClientesRoutingModule)},
-    {path : 'autores',loadChildren:()=> import('./autores/autores-routing.module').then(a=>a.AutoresRoutingModule)}
+    {path : 'autores',loadChildren:()=> import('./autores/autores-routing.module').then(a=>a.AutoresRoutingModule)},
+    {path : 'libros', loadChildren:()=> import('./libro/libros-routing.module').then(l=>l.LibrosRoutingModule)}
 ];
 
 

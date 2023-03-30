@@ -5,7 +5,6 @@ import { AutoresComponent } from './autores.component';
 import { FormsModule } from '@angular/forms';
 import { FormComponent } from './form.component';
 
-
 const routes : Routes = [
   {path: '',component:AutoresComponent}
 ];

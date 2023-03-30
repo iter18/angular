@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../app.service';
-import { FormComponent } from './form.component';
+import { FormComponent } from './form.component'
 import swal from 'sweetalert2';
 
 
@@ -14,7 +14,7 @@ import swal from 'sweetalert2';
 export class AutoresComponent implements OnInit{
 
   /**Para poder ocupaar los componentes de otro es necesario  */
-  @ViewChild(FormComponent) formComponent!: FormComponent;
+ @ViewChild(FormComponent) formComponent!: FormComponent;
 
   nombreB: string = "";
   nombreA :string="";

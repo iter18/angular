@@ -1,10 +1,127 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../app.service';
+import { FormComponent } from './form.component';
+import swal from 'sweetalert2';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-libro',
-  templateUrl: './libro.component.html',
-  styleUrls: ['./libro.component.css']
+  templateUrl: './libro.component.html'
 })
-export class LibroComponent {
+export class LibroComponent implements OnInit{
+  @ViewChild(FormComponent) formComponent!: FormComponent;
+
+  pnAlta : boolean=false;
+  pnModificar : boolean=false;
+  pnBuscar: boolean = true;
+  waitResponse:boolean=false;
+  webToken : any; 
+  spinnerLoad : boolean = false;
+  listaLibros : any[] = [];
+  nombreB : string = "";
+
+  
+  isbnA:string="";
+  tituloA:string="";
+  categoriaA:string="";
+  editorialA:string="";
+  imagenA: File = new File([], '');
+
+  constructor(
+    private authService : AuthService,
+    private router : Router,
+    private activateRoute : ActivatedRoute,
+    ){ }
+
+  ngOnInit(): void {
+    this.webToken = sessionStorage.getItem("tokenB");
+    if(this.webToken === ""|| this.webToken === null){
+      this.router.navigate(['login'])
+    }
+    //this.onBuscar();
+
+    
+  }
+
+  onBuscar() : any {
+    this.nombreB = "hola";
+    console.log("valor: "+this.formComponent.nombre);
+  }
+
+    //Función para llamar form de crear
+    onNuevo():void{
+      this.isbnA="";
+      this.tituloA="";
+      this.categoriaA="";
+      this.editorialA="";
+      this.imagenA;
+      $("#buscar").fadeOut(()=>{
+        this.pnBuscar=false;
+        this.pnAlta = true
+      });
+    }
+
+
+
+
+    //Funcion para guardar un registro autor
+  onGuardar():void{
+    //this.formComponent.nombre
+    this.isbnA=this.formComponent.isbn;
+    this.tituloA=this.formComponent.titulo;
+    this.categoriaA=this.formComponent.categoria;
+    this.editorialA=this.formComponent.editorial;
+    this.imagenA = this.formComponent.imagen;
+    if(this.isbnA == "" || this.tituloA == ""){
+      swal.fire('Campos obligatorios:','Nombre y Apellido','error');
+    }else{
+      this.waitResponse=true;
+      $("#txtCrear").fadeOut(()=>{
+        this.spinnerLoad = true
+        $(".spinnerB").fadeIn();
+      })
+     //Creamos formulario para procesar datos adjuntos con form
+     const formData = new FormData();
+     formData.append('isbn',this.isbnA);
+     formData.append('titulo',this.tituloA);
+     formData.append('categoria',this.categoriaA);
+     formData.append('editorial',this.editorialA);
+     formData.append('imagen',this.imagenA);
+
+      this.authService.procesaOperacionMultipart('/api/libros',this.webToken,'',formData).subscribe({
+        next:(res:any)=>{
+          if(res.status == 201){
+            swal.fire('Nuevo registro', `registro exitoso`,'success')
+            setTimeout(() => {
+              this.waitResponse=false;
+              $(".spinnerB").fadeOut(()=>{
+                $("#txtCrear").fadeIn()
+                this.spinnerLoad = false
+              
+              })
+              this.listaLibros.push(res.body)
+            }, 1000);
+          }
+        },
+        error:(err:HttpErrorResponse)=>{
+          setTimeout(() => {
+            this.waitResponse=false;
+            $(".spinnerB").fadeOut(()=>{
+              $("#txtCrear").fadeIn()
+              this.spinnerLoad = false
+            })
+          }, 1000);
+          swal.fire('Error:', this.authService.msgDecripcion,'error');
+        }
+      })
+    }
+  }
+
+  
+  /*onFileSelected(event: any){
+    const file : File = event.target.files[0];
+    this.imagenA = file;
+  }*/
 
 }

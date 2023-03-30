@@ -1,1 +1,167 @@
-<p>libro works!</p>
+<div class="card border-primary mb-3">
+  <div class="card-header text-white bg-dark">PANEL ADMINISTRACIÓN LIBROS</div>
+  <div class="card-body">
+    <!--- Panel de para filtro de búsqueda-->
+    <div *ngIf="pnBuscar" id="buscar">
+      <ng-container *ngTemplateOutlet="templateBuscar"></ng-container>
+    </div>
+    <!--Fin Panel búsqueda-->
+    <!--Panel alta-->
+
+    <div *ngIf="pnAlta" id="alta">
+      <ng-container *ngTemplateOutlet="templateAlta"></ng-container>
+    </div>
+
+    <!--Fin panel alta-->
+    <!--Panel para modificar-->
+    <div *ngIf="pnModificar" id="modificar">
+      <ng-container *ngTemplateOutlet="templateModificar"></ng-container>
+    </div>
+    <!--fin panel modificar-->
+  </div>
+  <div class="card border-primary mb-3 mx-2">
+    <div class="card-header text-white bg-primary">Lista de Autores</div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead class="text-center">
+          <tr>
+            <th>ID</th>
+            <th>NONBRE</th>
+            <th>APELLIDO</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngTemplateOutlet="filaLibro; context: { $implicit: listaLibros }"
+          ></ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Templates para aplicacion -->
+<!-- Template para buscar-->
+<ng-template #templateBuscar>
+  <div class="card mt-3 mx-auto" style="width: 18rem">
+    <div class="card-header text-dark bg-warning">Filtro de búsqueda</div>
+    <div class="card-body">
+      <div class="form-group row mb-3">
+        <label for="nombre" class="col-form-label col-sm-4">Nombre:</label>
+        <div class="col-sm-8">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="nombreB"
+            name="nombre"
+          />
+        </div>
+      </div>
+      <button class="btn btn-primary mx-2">Buscar</button>
+      <button class="btn btn-success" (click)="onNuevo()">Nuevo</button>
+    </div>
+  </div>
+</ng-template>
+<!-- Fin template buscar-->
+<!-- Template para alta de autor-->
+<ng-template #templateAlta>
+  <div class="card bg-dark text-white mx-5">
+    <div class="card-header bg-primary">Registro nuevo libro</div>
+    <div class="card-body">
+      <app-form
+        [isbn]="isbnA"
+        [titulo]="tituloA"
+        [categoria]="categoriaA"
+        [editorial]="editorialA"
+        [imagen]="imagenA"
+       
+      ></app-form>
+      <div class="form-group row my-2">
+        <div class="col-sm-6">
+          <button
+            class="btn btn-primary mx-2"
+            role="button"
+            [disabled]="waitResponse"
+            (click)="onGuardar()"
+          >
+            <span
+              class="spinner-border spinner-border-sm spinnerB"
+              role="status"
+              aria-hidden="true"
+              *ngIf="spinnerLoad"
+            ></span>
+            <span class="sr-only spinnerB" *ngIf="spinnerLoad"
+              >Enviando...</span
+            >
+            <span id="txtCrear">Registrar</span>
+          </button>
+          <button class="btn btn-danger" role="button">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!--Fin template alta-->
+<!--Template modificar-->
+<ng-template #templateModificar>
+  <div class="card bg-dark text-white mx-5">
+    <div class="card-header bg-primary">Modificar registro autor</div>
+    <div class="card-body">
+      <!-- <app-form [nombre]="nombreM" [apellido]="apellidoM"></app-form>-->
+      <div class="form-group row my-2">
+        <div class="col-sm-6">
+          <button
+            class="btn btn-primary mx-2"
+            role="button"
+            [disabled]="waitResponse"
+          >
+            <span
+              class="spinner-border spinner-border-sm spinnerB"
+              role="status"
+              aria-hidden="true"
+              *ngIf="spinnerLoad"
+            ></span>
+            <span class="sr-only spinnerB" *ngIf="spinnerLoad"
+              >Enviando...</span
+            >
+            <span id="txtCrear">Modificar</span>
+          </button>
+          <button class="btn btn-danger" role="button">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- fin template modificar-->
+<!--Template para registros en tabla-->
+<ng-template #filaLibro let-listaLibros>
+  <tr *ngFor="let libro of listaLibros; let i = index">
+    <td>{{ libro.id }}</td>
+    <td>{{ libro.nombre }}</td>
+    <td>{{ libro.apellido }}</td>
+    <td>
+      <div class="btn-group">
+        <button
+          class="btn btn-secondary btn-sm dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Opciones
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item">Editar</a>
+          </li>
+          <li>
+            <a class="dropdown-item">Eliminar</a>
+          </li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+<!-- Fin de template menu opciones-->
+
+<!-- Fin templates-->
