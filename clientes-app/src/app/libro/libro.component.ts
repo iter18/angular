@@ -118,10 +118,5 @@ export class LibroComponent implements OnInit{
     }
   }
 
-  
-  /*onFileSelected(event: any){
-    const file : File = event.target.files[0];
-    this.imagenA = file;
-  }*/
 
 }

@@ -74,8 +74,7 @@
         [titulo]="tituloA"
         [categoria]="categoriaA"
         [editorial]="editorialA"
-        [imagen]="imagenA"
-       
+        (imagenSeleccionada)="formComponent.imagen = $event"
       ></app-form>
       <div class="form-group row my-2">
         <div class="col-sm-6">
