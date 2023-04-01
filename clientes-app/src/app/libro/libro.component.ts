@@ -39,14 +39,26 @@ export class LibroComponent implements OnInit{
     if(this.webToken === ""|| this.webToken === null){
       this.router.navigate(['login'])
     }
-    //this.onBuscar();
+    this.onBuscar();
 
-    
   }
 
+  //Función para buscar
   onBuscar() : any {
-    this.nombreB = "hola";
-    console.log("valor: "+this.formComponent.nombre);
+
+    this.listaLibros = [];
+
+    this.authService.procesaOperacionGet('/api/libros/',this.webToken,'').subscribe({
+      next: (data:any)=>{
+        if(data.status==200){
+          this.listaLibros = data.body;
+        }
+      },
+      error:(err:HttpErrorResponse)=>{
+        swal.fire('Error:', this.authService.msgDecripcion,'error');
+      }
+    })
+
   }
 
     //Función para llamar form de crear
@@ -65,7 +77,7 @@ export class LibroComponent implements OnInit{
 
 
 
-    //Funcion para guardar un registro autor
+    //Funcion para guardar un registro
   onGuardar():void{
     //this.formComponent.nombre
     this.isbnA=this.formComponent.isbn;
@@ -73,9 +85,10 @@ export class LibroComponent implements OnInit{
     this.categoriaA=this.formComponent.categoria;
     this.editorialA=this.formComponent.editorial;
     this.imagenA = this.formComponent.imagen;
-    if(this.isbnA == "" || this.tituloA == ""){
+    /*if(this.isbnA == "" || this.tituloA == ""){
       swal.fire('Campos obligatorios:','Nombre y Apellido','error');
-    }else{
+      return;
+    }*/
       this.waitResponse=true;
       $("#txtCrear").fadeOut(()=>{
         this.spinnerLoad = true
@@ -115,8 +128,17 @@ export class LibroComponent implements OnInit{
           swal.fire('Error:', this.authService.msgDecripcion,'error');
         }
       })
-    }
+    
   }
 
+
+    //Función para reset los panel a origen
+    onReset(panel:String):void{
+      $("#"+panel).fadeOut(()=>{
+        this.pnAlta= false;
+        this.pnModificar= false;
+        this.pnBuscar = true;
+      })
+    }
 
 }

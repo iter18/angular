@@ -61,7 +61,7 @@ export class AutoresComponent implements OnInit{
 
       },
       error:(err:HttpErrorResponse)=>{
-
+        swal.fire('Error:', this.authService.msgDecripcion,'error');
       }
     });
   }

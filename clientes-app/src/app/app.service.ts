@@ -58,6 +58,7 @@ export class AuthService {
                 }).pipe(catchError((error:HttpErrorResponse)=>{
                   if(error.status == 401){
                     if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                      this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                         this.router.navigate(['login']);
                     }
                   }
@@ -83,6 +84,7 @@ export class AuthService {
                 }).pipe(catchError((error:HttpErrorResponse)=>{
                   if(error.status == 500){
                     if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                      this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                         this.router.navigate(['login']);
                     }
                   }
@@ -113,6 +115,7 @@ export class AuthService {
                   }).pipe(catchError((error:HttpErrorResponse)=>{
                     if(error.status == 500){
                       if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                        this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                           this.router.navigate(['login']);
                       }
                     }
@@ -140,6 +143,7 @@ export class AuthService {
                           }).pipe(catchError((error:HttpErrorResponse)=>{
                             if(error.status == 500){
                               if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                                this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                                   this.router.navigate(['login']);
                               }
                             }
@@ -165,6 +169,7 @@ export class AuthService {
                           }).pipe(catchError((error:HttpErrorResponse)=>{
                             if(error.status == 500){
                               if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                                this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                                   this.router.navigate(['login']);
                               }
                             }

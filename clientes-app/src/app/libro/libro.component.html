@@ -26,8 +26,9 @@
         <thead class="text-center">
           <tr>
             <th>ID</th>
-            <th>NONBRE</th>
-            <th>APELLIDO</th>
+            <th>TITULO</th>
+            <th>CATEGORIA</th>
+            <th>FECHA R.</th>
             <th></th>
           </tr>
         </thead>
@@ -137,8 +138,9 @@
 <ng-template #filaLibro let-listaLibros>
   <tr *ngFor="let libro of listaLibros; let i = index">
     <td>{{ libro.id }}</td>
-    <td>{{ libro.nombre }}</td>
-    <td>{{ libro.apellido }}</td>
+    <td>{{ libro.titulo }}</td>
+    <td>{{ libro.categoria }}</td>
+    <td>{{ libro.fechaRegistro | date : "EEEE dd, MMMM yyyy" }}</td>
     <td>
       <div class="btn-group">
         <button
@@ -155,6 +157,9 @@
           </li>
           <li>
             <a class="dropdown-item">Eliminar</a>
+          </li>
+          <li>
+            <a class="dropdown-item">Detalle</a>
           </li>
         </ul>
       </div>
