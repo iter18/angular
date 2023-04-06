@@ -20,7 +20,7 @@
     <!--fin panel modificar-->
   </div>
   <div class="card border-primary mb-3 mx-2">
-    <div class="card-header text-white bg-primary">Lista de Autores</div>
+    <div class="card-header text-white bg-primary">Lista de Libros</div>
     <div class="card-body">
       <table class="table table-bordered table-striped">
         <thead class="text-center">
@@ -75,6 +75,7 @@
         [titulo]="tituloA"
         [categoria]="categoriaA"
         [editorial]="editorialA"
+        [comboAutores]="comboAutores"
         (imagenSeleccionada)="formComponent.imagen = $event"
       ></app-form>
       <div class="form-group row my-2">
@@ -159,7 +160,7 @@
             <a class="dropdown-item">Eliminar</a>
           </li>
           <li>
-            <a class="dropdown-item">Detalle</a>
+            <a class="dropdown-item" (click)="showImageModal(libro)">Detalle</a>
           </li>
         </ul>
       </div>
@@ -169,3 +170,13 @@
 <!-- Fin de template menu opciones-->
 
 <!-- Fin templates-->
+
+<!-- Modale para mensajes o detalla-->
+<app-modals
+  [template]="modalTemplate"
+  [image]="src"
+  [isbn]="isbnCo"
+  [titulo]="tituloCo"
+  [categoria]="categoriaCo"
+  [editorial]="editorialCo"
+></app-modals>

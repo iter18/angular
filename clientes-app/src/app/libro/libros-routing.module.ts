@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LibroComponent } from './libro.component';
 import { FormComponent } from './form.component';
 import { FormsModule } from '@angular/forms';
+import { ModalsComponent } from './modals.component';
+
 
 const routes : Routes =[
   {path: '', component:LibroComponent}
@@ -11,7 +13,7 @@ const routes : Routes =[
 
 
 @NgModule({
-  declarations: [LibroComponent,FormComponent],
+  declarations: [LibroComponent,FormComponent,ModalsComponent],
   imports: [
     CommonModule,
     FormsModule,

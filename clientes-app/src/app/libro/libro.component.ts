@@ -20,13 +20,23 @@ export class LibroComponent implements OnInit{
   spinnerLoad : boolean = false;
   listaLibros : any[] = [];
   nombreB : string = "";
+  modalTemplate: string = "";
 
-  
+  /**Variables para alta de libro */
   isbnA:string="";
   tituloA:string="";
   categoriaA:string="";
   editorialA:string="";
   imagenA: File = new File([], '');
+  src : string = "";
+  comboAutores:any[] = [];
+  autorA:Number=0;
+  /**Variables para consulta de libro para detalle */
+  isbnCo:string="";
+  tituloCo:string="";
+  categoriaCo:string="";
+  editorialCo:string="";
+
 
   constructor(
     private authService : AuthService,
@@ -68,6 +78,8 @@ export class LibroComponent implements OnInit{
       this.categoriaA="";
       this.editorialA="";
       this.imagenA;
+      this.comboAutores =[{code: 1, valor:"arturo"},{code: 2, valor:"roman"}]
+
       $("#buscar").fadeOut(()=>{
         this.pnBuscar=false;
         this.pnAlta = true
@@ -85,10 +97,12 @@ export class LibroComponent implements OnInit{
     this.categoriaA=this.formComponent.categoria;
     this.editorialA=this.formComponent.editorial;
     this.imagenA = this.formComponent.imagen;
-    /*if(this.isbnA == "" || this.tituloA == ""){
+    this.autorA = this.formComponent.autorSelected;
+    console.log("Autor Seleccionado: "+this.autorA)
+    if(this.isbnA == "" || this.tituloA == ""){
       swal.fire('Campos obligatorios:','Nombre y Apellido','error');
       return;
-    }*/
+    }
       this.waitResponse=true;
       $("#txtCrear").fadeOut(()=>{
         this.spinnerLoad = true
@@ -140,5 +154,19 @@ export class LibroComponent implements OnInit{
         this.pnBuscar = true;
       })
     }
+
+    
+
+    showImageModal(reg:any) {
+      this.isbnCo = reg.isbn;
+      this.tituloCo = reg.titulo;
+      this.categoriaCo = reg.categoria;
+      this.editorialCo = reg.editorial;
+      $('#myModal').modal('show');
+      this.src = "./assets/uplodas/"+reg.rutaFoto;
+
+      this.modalTemplate = 'image';
+    }
+   
 
 }

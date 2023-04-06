@@ -1,0 +1,68 @@
+<ng-container [ngSwitch]="template">
+  <ng-container *ngSwitchCase="'image'">
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">DETALLE LIBRO</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              (click)="closeModal()"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img
+              [src]="safeImageUrl"
+              alt=""
+              width="40%"
+              class="img-thumbnail rounded float-start"
+            />
+            <ul class="list-group">
+              <li class="list-group-item"><b>ISBN:</b> {{ isbn }}</li>
+              <li class="list-group-item"><b>TITULO:</b> {{ titulo }}</li>
+              <li class="list-group-item"><b>CATEGORIA:</b> {{ categoria }}</li>
+              <li class="list-group-item"><b>EDITORIAL:</b> {{ editorial }}</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-dismiss="modal"
+              (click)="closeModal()"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'text'">
+    <p>{{ text }}</p>
+  </ng-container>
+  <ng-container *ngSwitchCase="'inputs'">
+    <form>
+      <div class="form-group" *ngFor="let input of inputs">
+        <label for="{{ input.id }}">{{ input.label }}</label>
+        <input
+          type="{{ input.type }}"
+          class="form-control"
+          id="{{ input.id }}"
+          [(ngModel)]="input.value"
+        />
+      </div>
+    </form>
+  </ng-container>
+</ng-container>

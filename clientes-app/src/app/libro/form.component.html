@@ -47,6 +47,22 @@
   </div>
 </div>
 <div class="form-group row my-2">
+  <label for="editorial" class="col-form-label col-sm-2">Autor:</label>
+  <div class="col-sm-6">
+    <select
+      class="form-select form-select-sm"
+      aria-label=".form-select-sm example"
+      [(ngModel)]="autorSelected"
+      name="autorSelected"
+    >
+      <option [value]="0">-- Selecciona Opcion --</option>
+      <option *ngFor="let autor of comboAutores" [value]="autor.code">
+        {{ autor.valor }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="form-group row my-2">
   <label for="editorial" class="col-form-label col-sm-2">Imagen:</label>
   <div class="col-sm-6">
     <input type="file" (change)="onFileSelected($event)" name="imagen" />

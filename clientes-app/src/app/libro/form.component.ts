@@ -15,9 +15,11 @@ export class FormComponent {
   @Input() editorial:string="";
   @Input() imagen: File = new File([], '');
   @Input() nombre :string = "";
+  @Input() comboAutores: any[] = [];
+
 
   @Output() imagenSeleccionada: EventEmitter<File> = new EventEmitter<File>();
-
+  @Output() autorSelected : Number = 0;
 
   @ViewChild('libroForm', { static: true }) libroFormTemplate : any;
   @ViewChild('buscarForm') buscarFormTemplate: any;
