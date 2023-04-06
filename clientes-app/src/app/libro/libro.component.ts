@@ -78,7 +78,17 @@ export class LibroComponent implements OnInit{
       this.categoriaA="";
       this.editorialA="";
       this.imagenA;
-      this.comboAutores =[{code: 1, valor:"arturo"},{code: 2, valor:"roman"}]
+     
+      this.authService.procesaOperacionGet('/api/autores/combo',this.webToken,'').subscribe({
+        next: (data:any)=>{
+          if(data.status==200){
+            this.comboAutores = data.body;
+          }
+        },
+        error:(err:HttpErrorResponse)=>{
+          swal.fire('Error:', this.authService.msgDecripcion,'error');
+        }
+      })
 
       $("#buscar").fadeOut(()=>{
         this.pnBuscar=false;
