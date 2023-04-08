@@ -30,12 +30,13 @@ export class LibroComponent implements OnInit{
   imagenA: File = new File([], '');
   src : string = "";
   comboAutores:any[] = [];
-  autorA:Number=0;
+  autorA:Number = 0;
   /**Variables para consulta de libro para detalle */
   isbnCo:string="";
   tituloCo:string="";
   categoriaCo:string="";
   editorialCo:string="";
+  autorName: string = "";
 
 
   constructor(
@@ -108,9 +109,8 @@ export class LibroComponent implements OnInit{
     this.editorialA=this.formComponent.editorial;
     this.imagenA = this.formComponent.imagen;
     this.autorA = this.formComponent.autorSelected;
-    console.log("Autor Seleccionado: "+this.autorA)
-    if(this.isbnA == "" || this.tituloA == ""){
-      swal.fire('Campos obligatorios:','Nombre y Apellido','error');
+    if(this.isbnA == "" || this.tituloA == "" || this.categoriaA == ""){
+      swal.fire('Campos obligatorios:','Isbn,Titulo y Categoria','error');
       return;
     }
       this.waitResponse=true;
@@ -124,6 +124,7 @@ export class LibroComponent implements OnInit{
      formData.append('titulo',this.tituloA);
      formData.append('categoria',this.categoriaA);
      formData.append('editorial',this.editorialA);
+     formData.append('autor',this.autorA.toString());
      formData.append('imagen',this.imagenA);
 
       this.authService.procesaOperacionMultipart('/api/libros',this.webToken,'',formData).subscribe({
@@ -168,13 +169,17 @@ export class LibroComponent implements OnInit{
     
 
     showImageModal(reg:any) {
-      this.isbnCo = reg.isbn;
-      this.tituloCo = reg.titulo;
-      this.categoriaCo = reg.categoria;
-      this.editorialCo = reg.editorial;
-      $('#myModal').modal('show');
-      this.src = "./assets/uplodas/"+reg.rutaFoto;
-
+  
+      setTimeout(() => {
+        $('#myModal').modal('show');
+      }, 300);
+      
+      this.isbnCo = reg.libro.isbn;
+      this.tituloCo = reg.libro.titulo;
+      this.categoriaCo = reg.libro.categoria;
+      this.editorialCo = reg.libro.editorial;
+      this.src = "./assets/uplodas/"+reg.libro.rutaFoto;
+      this.autorName = reg.autor.nombre+" "+reg.autor.apellido;
       this.modalTemplate = 'image';
     }
    

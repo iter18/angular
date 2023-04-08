@@ -137,11 +137,11 @@
 <!-- fin template modificar-->
 <!--Template para registros en tabla-->
 <ng-template #filaLibro let-listaLibros>
-  <tr *ngFor="let libro of listaLibros; let i = index">
-    <td>{{ libro.id }}</td>
-    <td>{{ libro.titulo }}</td>
-    <td>{{ libro.categoria }}</td>
-    <td>{{ libro.fechaRegistro | date : "EEEE dd, MMMM yyyy" }}</td>
+  <tr *ngFor="let autorLibro of listaLibros; let i = index">
+    <td>{{ autorLibro.libro.id }}</td>
+    <td>{{ autorLibro.libro.titulo }}</td>
+    <td>{{ autorLibro.libro.categoria }}</td>
+    <td>{{ autorLibro.libro.fechaRegistro | date : "EEEE dd, MMMM yyyy" }}</td>
     <td>
       <div class="btn-group">
         <button
@@ -160,7 +160,9 @@
             <a class="dropdown-item">Eliminar</a>
           </li>
           <li>
-            <a class="dropdown-item" (click)="showImageModal(libro)">Detalle</a>
+            <a class="dropdown-item" (click)="showImageModal(autorLibro)"
+              >Detalle</a
+            >
           </li>
         </ul>
       </div>
@@ -179,4 +181,5 @@
   [titulo]="tituloCo"
   [categoria]="categoriaCo"
   [editorial]="editorialCo"
+  [autor]="autorName"
 ></app-modals>
