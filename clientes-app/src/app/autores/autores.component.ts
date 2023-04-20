@@ -83,6 +83,7 @@ export class AutoresComponent implements OnInit{
     this.reg = reg;
     this.idx=indice;
     $("#buscar").fadeOut(()=>{
+      this.pnAlta=false;
       this.pnBuscar=false;
       this.pnModificar = true;
     });

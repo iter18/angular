@@ -159,9 +159,8 @@ export class AuthService {
 
               }
 
-              /** Servicio para Operaciones POST */
+              /** Servicio para Operaciones POST con multipart*/
               procesaOperacionMultipart(uri : string, token : string, params:any ,formData : FormData) : Observable<HttpResponse<any>>{
-
                 var headersApi = new HttpHeaders({'Authorization' : token});
                           return this.http.post<any>(this.urlEndPoint+uri,
                             formData,{headers:headersApi,observe:'response',params : params,
@@ -182,10 +181,31 @@ export class AuthService {
                             }
                             return throwError(()=> error);
                           }));
-
               }
 
-
+              /** Servicio para Operaciones PUT con multipart*/
+              procesaOperacionMultipartPut(uri : string, token : string, params:any ,formData : FormData) : Observable<HttpResponse<any>>{
+                var headersApi = new HttpHeaders({'Authorization' : token});
+                          return this.http.put<any>(this.urlEndPoint+uri,
+                            formData,{headers:headersApi,observe:'response',params : params,
+                            reportProgress:true,responseType:'json',withCredentials:true
+                          }).pipe(catchError((error:HttpErrorResponse)=>{
+                            if(error.status == 500){
+                              if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
+                                this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
+                                  this.router.navigate(['login']);
+                              }
+                            }
+                            if(error.status == 409){
+                               // this.msgDecripcion = error.error.mensaje;
+                               this.msgDecripcion = error.error;
+                            }
+                            if(error.status == 403){
+                              this.msgDecripcion = "Acceso denegado al recurso solicitado"
+                            }
+                            return throwError(()=> error);
+                          }));
+              }
               hasRole(role:string):boolean{
                 //con esta validacion aseguramos que el valor sea un string aunque el valor de rol este vacio
                 const rolesForSession = sessionStorage.getItem('roles')||'';

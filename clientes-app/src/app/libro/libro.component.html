@@ -97,7 +97,13 @@
             >
             <span id="txtCrear">Registrar</span>
           </button>
-          <button class="btn btn-danger" role="button">Cancelar</button>
+          <button
+            class="btn btn-danger"
+            role="button"
+            (click)="onReset('alta')"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
@@ -109,13 +115,23 @@
   <div class="card bg-dark text-white mx-5">
     <div class="card-header bg-primary">Modificar registro autor</div>
     <div class="card-body">
-      <!-- <app-form [nombre]="nombreM" [apellido]="apellidoM"></app-form>-->
+      <app-form
+        [id]="id"
+        [isbn]="isbnM"
+        [titulo]="tituloM"
+        [categoria]="categoriaM"
+        [editorial]="editorialM"
+        [comboAutores]="comboAutores"
+        [autorSelected]="autorM"
+        (imagenSeleccionada)="formComponent.imagen = $event"
+      ></app-form>
       <div class="form-group row my-2">
         <div class="col-sm-6">
           <button
             class="btn btn-primary mx-2"
             role="button"
             [disabled]="waitResponse"
+            (click)="onModificar()"
           >
             <span
               class="spinner-border spinner-border-sm spinnerB"
@@ -128,7 +144,13 @@
             >
             <span id="txtCrear">Modificar</span>
           </button>
-          <button class="btn btn-danger" role="button">Cancelar</button>
+          <button
+            class="btn btn-danger"
+            role="button"
+            (click)="onReset('modificar')"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
@@ -138,7 +160,7 @@
 <!--Template para registros en tabla-->
 <ng-template #filaLibro let-listaLibros>
   <tr *ngFor="let autorLibro of listaLibros; let i = index">
-    <td>{{ autorLibro.libro.id }}</td>
+    <td>{{ autorLibro.id }}</td>
     <td>{{ autorLibro.libro.titulo }}</td>
     <td>{{ autorLibro.libro.categoria }}</td>
     <td>{{ autorLibro.libro.fechaRegistro | date : "EEEE dd, MMMM yyyy" }}</td>
@@ -154,7 +176,9 @@
         </button>
         <ul class="dropdown-menu">
           <li>
-            <a class="dropdown-item">Editar</a>
+            <a class="dropdown-item" (click)="onEditar(autorLibro, i)"
+              >Editar</a
+            >
           </li>
           <li>
             <a class="dropdown-item">Eliminar</a>

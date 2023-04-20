@@ -8,7 +8,7 @@ export class FormComponent {
   /** @Input() se usa para recibir información del componente padre al componente hijo
    * @Ouput() se usa para enviar del componente hijo información o eventos al padre
    */
-
+  @Input() id:Number = 0;
   @Input() isbn:string="";
   @Input() titulo:string="";
   @Input() categoria:string="";
@@ -16,10 +16,10 @@ export class FormComponent {
   @Input() imagen: File = new File([], '');
   @Input() nombre :string = "";
   @Input() comboAutores: any[] = [];
-
+  @Input() autorSelected : Number = 0;
 
   @Output() imagenSeleccionada: EventEmitter<File> = new EventEmitter<File>();
-  @Output() autorSelected : Number = 0;
+  
 
   @ViewChild('libroForm', { static: true }) libroFormTemplate : any;
   @ViewChild('buscarForm') buscarFormTemplate: any;

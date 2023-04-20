@@ -21,6 +21,9 @@ export class LibroComponent implements OnInit{
   listaLibros : any[] = [];
   nombreB : string = "";
   modalTemplate: string = "";
+  idx :number =0;
+  reg : any;
+  comboAutores:any[] = [];
 
   /**Variables para alta de libro */
   isbnA:string="";
@@ -29,8 +32,16 @@ export class LibroComponent implements OnInit{
   editorialA:string="";
   imagenA: File = new File([], '');
   src : string = "";
-  comboAutores:any[] = [];
   autorA:Number = 0;
+  /**Variables para modificar registro de libro */
+  id : Number = 0;
+  isbnM:string="";
+  tituloM:string="";
+  categoriaM:string="";
+  editorialM:string="";
+  imagenM: File = new File([], '');
+  srcM : string = "";
+  autorM:Number = 0;
   /**Variables para consulta de libro para detalle */
   isbnCo:string="";
   tituloCo:string="";
@@ -97,7 +108,32 @@ export class LibroComponent implements OnInit{
       });
     }
 
-
+  //Funcion para llamar form/panel modificar
+  onEditar(reg:any,indice:number) : void {
+  this.id = reg.libro.id;
+  this.isbnM =reg.libro.isbn;
+  this.tituloM = reg.libro.titulo;
+  this.categoriaM =reg.libro.categoria;
+  this.editorialM =reg.libro.editorial;
+  this.autorM = reg.autor.id;
+  this.reg = reg;
+  this.idx=indice;
+  this.authService.procesaOperacionGet('/api/autores/combo',this.webToken,'').subscribe({
+      next: (data:any)=>{
+        if(data.status==200){
+          this.comboAutores = data.body;
+        }
+      },
+      error:(err:HttpErrorResponse)=>{
+        swal.fire('Error:', this.authService.msgDecripcion,'error');
+      }
+    })
+    $("#buscar").fadeOut(()=>{
+      this.pnAlta=false;
+      this.pnBuscar=false;
+      this.pnModificar = true;
+    });
+  }
 
 
     //Funcion para guardar un registro
@@ -155,6 +191,69 @@ export class LibroComponent implements OnInit{
       })
     
   }
+
+    //Funcion para modificar registro Libro
+    onModificar():void{
+      this.id = this.formComponent.id;
+      this.isbnM=this.formComponent.isbn;
+      this.tituloM=this.formComponent.titulo;
+      this.categoriaM=this.formComponent.categoria;
+      this.editorialM=this.formComponent.editorial;
+      this.imagenM = this.formComponent.imagen;
+      this.autorM = this.formComponent.autorSelected;
+      if(this.isbnM == "" || this.tituloM == "" || this.categoriaM == ""){
+        swal.fire('Campos obligatorios:','Isbn,Titulo y Categoria','error');
+        return;
+      }
+  
+      const swalWithBootstrapButtons = swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      })
+  
+      swalWithBootstrapButtons.fire({
+        title: 'Confirmación',
+        text: `Esta seguro de modificar este registro?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, modificar!',
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //Creamos formulario para procesar datos adjuntos con form
+          const formData = new FormData();
+          formData.append('idLibro',this.id.toString());
+          formData.append('isbn',this.isbnM);
+          formData.append('titulo',this.tituloM);
+          formData.append('categoria',this.categoriaM);
+          formData.append('editorial',this.editorialM);
+          formData.append('autor',this.autorM.toString());
+          formData.append('imagen',this.imagenM);
+          this.authService.procesaOperacionMultipartPut('/api/libros/'+this.reg.id,this.webToken,'',formData).subscribe({
+              next:(response : any) =>{
+                if(response.status == 201){
+                  this.listaLibros[this.idx] = response.body;
+                  swalWithBootstrapButtons.fire(
+                    'Modificado!',
+                    'El registro seleccionado ha sido guardado',
+                    'success'
+                  )
+                 this.onReset("modificar"); 
+                }
+              },
+              error:(err:HttpErrorResponse)=>{
+                swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
+              }
+            }
+          )
+        } 
+      })
+      
+    }
 
 
     //Función para reset los panel a origen
