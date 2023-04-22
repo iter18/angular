@@ -45,21 +45,46 @@
 <!-- Templates para aplicacion -->
 <!-- Template para buscar-->
 <ng-template #templateBuscar>
-  <div class="card mt-3 mx-auto" style="width: 18rem">
+  <div class="card mt-3 mx-auto" style="width: 20rem">
     <div class="card-header text-dark bg-warning">Filtro de búsqueda</div>
     <div class="card-body">
       <div class="form-group row mb-3">
-        <label for="nombre" class="col-form-label col-sm-4">Nombre:</label>
+        <label for="titulo" class="col-form-label col-sm-4">Titulo:</label>
         <div class="col-sm-8">
           <input
             type="text"
             class="form-control"
-            [(ngModel)]="nombreB"
-            name="nombre"
+            [(ngModel)]="tituloB"
+            name="titulo"
           />
         </div>
+        <label for="isbn" class="col-form-label col-sm-4 my-2">ISBN:</label>
+        <div class="col-sm-8 my-2">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="isbnB"
+            name="isbn"
+          />
+        </div>
+        <label for="editorial" class="col-form-label col-sm-4 my-2"
+          >Autor:</label
+        >
+        <div class="col-sm-8 my-2">
+          <select
+            class="form-select form-select-sm"
+            aria-label=".form-select-sm example"
+            [(ngModel)]="autorB"
+            name="autorSelected"
+          >
+            <option [value]="0">-- Selecciona Opcion --</option>
+            <option *ngFor="let autor of comboAutores" [value]="autor.code">
+              {{ autor.valor }}
+            </option>
+          </select>
+        </div>
       </div>
-      <button class="btn btn-primary mx-2">Buscar</button>
+      <button class="btn btn-primary mx-2" (click)="onBuscar()">Buscar</button>
       <button class="btn btn-success" (click)="onNuevo()">Nuevo</button>
     </div>
   </div>

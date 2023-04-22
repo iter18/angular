@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../app.service';
 import { FormComponent } from './form.component';
 import swal from 'sweetalert2';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-libro',
@@ -19,7 +19,6 @@ export class LibroComponent implements OnInit{
   webToken : any; 
   spinnerLoad : boolean = false;
   listaLibros : any[] = [];
-  nombreB : string = "";
   modalTemplate: string = "";
   idx :number =0;
   reg : any;
@@ -42,12 +41,18 @@ export class LibroComponent implements OnInit{
   imagenM: File = new File([], '');
   srcM : string = "";
   autorM:Number = 0;
-  /**Variables para consulta de libro para detalle */
+  /**Variables para ver detalle del libro*/
   isbnCo:string="";
   tituloCo:string="";
   categoriaCo:string="";
   editorialCo:string="";
   autorName: string = "";
+  /** Variables para consulta de libros con filtros */
+  isbnB : string = "";
+  tituloB : string = "";
+  autorB : Number =0;
+
+
 
 
   constructor(
@@ -62,15 +67,27 @@ export class LibroComponent implements OnInit{
       this.router.navigate(['login'])
     }
     this.onBuscar();
+    this.llenaComboAutores();
 
   }
 
   //Función para buscar
   onBuscar() : any {
-
     this.listaLibros = [];
+    let p = new HttpParams();
+    //validaciones para que se tome en cuenta en caso de que que sean diferentes de null o empty
+    if(this.tituloB!=""){
+      p = p.append('tituloLibro',this.tituloB.trim());
+    }
+    if(this.autorB!=0){
+      p = p.append('autorLibro',this.autorB.toString());
+    }
+    if(this.isbnB!=""){
+      p = p.append('isbnLibro',this.isbnB);
+    }
 
-    this.authService.procesaOperacionGet('/api/libros/',this.webToken,'').subscribe({
+    
+    this.authService.procesaOperacionGet('/api/libros/',this.webToken,p).subscribe({
       next: (data:any)=>{
         if(data.status==200){
           this.listaLibros = data.body;
@@ -90,7 +107,15 @@ export class LibroComponent implements OnInit{
       this.categoriaA="";
       this.editorialA="";
       this.imagenA;
-     
+
+      $("#buscar").fadeOut(()=>{
+        this.pnBuscar=false;
+        this.pnAlta = true
+      });
+    }
+
+    //funcion para llenar combos
+    llenaComboAutores() : void{
       this.authService.procesaOperacionGet('/api/autores/combo',this.webToken,'').subscribe({
         next: (data:any)=>{
           if(data.status==200){
@@ -100,11 +125,6 @@ export class LibroComponent implements OnInit{
         error:(err:HttpErrorResponse)=>{
           swal.fire('Error:', this.authService.msgDecripcion,'error');
         }
-      })
-
-      $("#buscar").fadeOut(()=>{
-        this.pnBuscar=false;
-        this.pnAlta = true
       });
     }
 
