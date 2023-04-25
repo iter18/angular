@@ -275,6 +275,48 @@ export class LibroComponent implements OnInit{
       
     }
 
+      //Función para eliminar registros de la tabla
+  onEliminar(reg:any, id:number) : void{
+
+    const swalWithBootstrapButtons = swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swalWithBootstrapButtons.fire({
+      title: 'Está seguro?',
+      text: `Seguro que desea eliminar el registro`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.authService.procesaOperacionDelete('/api/libros/'+reg.id,this.webToken,'').subscribe({
+            next:(response : any) =>{
+              if(response.status == 204){
+                this.listaLibros.splice(id,1);
+                swalWithBootstrapButtons.fire(
+                  'Eliminado!',
+                  'El registro seleccionado ha sido borrado',
+                  'success'
+                )
+              }
+            },
+            error:(err:HttpErrorResponse)=>{
+              swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
+            }
+          }
+        )
+      } 
+    })
+  }
+
 
     //Función para reset los panel a origen
     onReset(panel:String):void{
