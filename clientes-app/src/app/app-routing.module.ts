@@ -8,8 +8,9 @@ const routes: Routes =[
     {path : 'login',component : LoginComponent},
     {path : 'clientes',loadChildren:()=> import('./clientes/clientes-routing.module').then(c=>c.ClientesRoutingModule)},
     {path : 'autores',loadChildren:()=> import('./autores/autores-routing.module').then(a=>a.AutoresRoutingModule)},
-    {path : 'libros', loadChildren:()=> import('./libro/libros-routing.module').then(l=>l.LibrosRoutingModule)}
-];
+    {path : 'libros', loadChildren:()=> import('./libro/libros-routing.module').then(l=>l.LibrosRoutingModule)},
+    {path : 'alta-Producto', loadChildren:()=> import('./inventario/alta-productos/alta-productos-routing.module').then(aP=>aP.AltaProductosRoutingModule)}
+]; 
 
 
 @NgModule({

@@ -1,0 +1,49 @@
+<ng-container [ngSwitch]="formulario">
+  <ng-container *ngSwitchCase="'formAltaInventario'">
+    <div class="form-group row">
+      <label for="editorial" class="col-form-label col-sm-2">Libros:</label>
+      <div class="col-sm-6">
+        <select
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+          name="libroSelected"
+        >
+          <!--<option [value]="0">-- Selecciona Opcion --</option>
+                <option *ngFor="let autor of comboAutores" [value]="autor.code">
+                  {{ autor.valor }}
+                </option>-->
+        </select>
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="isbn" class="col-form-label col-sm-2">ISBN:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="autor" class="col-form-label col-sm-2">Autor:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="editorial" class="col-form-label col-sm-2">Editorial:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="stock" class="col-form-label col-sm-2">Stock:</label>
+      <div class="col-sm-6">
+        <input type="text" name="stock" class="form-control" required />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="precio" class="col-form-label col-sm-2">Precio:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" />
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
