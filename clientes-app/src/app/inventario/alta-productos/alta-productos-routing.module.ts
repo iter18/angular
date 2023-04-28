@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {  RouterModule, Routes } from '@angular/router';
 import { AltaProductosComponent } from './alta-productos.component';
-import { FormulariosComponent } from 'src/app/formularios/formularios.component';
+import { FormsModule } from '@angular/forms';
+import { SharedModulesModule } from 'src/app/shared-modules/shared-modules.module';
 
 
 const routes : Routes = [
@@ -10,9 +11,11 @@ const routes : Routes = [
 ]
 
 @NgModule({
-  declarations: [AltaProductosComponent,FormulariosComponent],
+  declarations: [AltaProductosComponent],
   imports: [
     CommonModule,
+    SharedModulesModule,
+    FormsModule,
     RouterModule.forChild(routes)
   ]
 })

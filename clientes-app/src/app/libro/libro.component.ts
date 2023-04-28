@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../app.service';
-import { FormComponent } from './form.component';
 import swal from 'sweetalert2';
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { FormulariosComponent } from '../formularios/formularios.component';
 
 @Component({
   selector: 'app-libro',
   templateUrl: './libro.component.html'
 })
 export class LibroComponent implements OnInit{
-  @ViewChild(FormComponent) formComponent!: FormComponent;
+  @ViewChild(FormulariosComponent) formulariosComponent!: FormulariosComponent;
+  
 
   pnAlta : boolean=false;
   pnModificar : boolean=false;
@@ -23,6 +24,7 @@ export class LibroComponent implements OnInit{
   idx :number =0;
   reg : any;
   comboAutores:any[] = [];
+  formulario : string ="";
 
   /**Variables para alta de libro */
   isbnA:string="";
@@ -60,19 +62,27 @@ export class LibroComponent implements OnInit{
     private router : Router,
     private activateRoute : ActivatedRoute,
     ){ }
-
+ 
   ngOnInit(): void {
     this.webToken = sessionStorage.getItem("tokenB");
     if(this.webToken === ""|| this.webToken === null){
       this.router.navigate(['login'])
     }
-    this.onBuscar();
+    this.formulario = "formBuscarLibro"; 
     this.llenaComboAutores();
-
+    
   }
+  ngAfterViewInit(){
+    this.onBuscar();
+  }
+ 
+  
 
   //Función para buscar
   onBuscar() : any {
+    this.tituloB = this.formulariosComponent.tituloB;
+    this.autorB = this.formulariosComponent.autorB;
+    this.isbnB = this.formulariosComponent.isbnB; 
     this.listaLibros = [];
     let p = new HttpParams();
     //validaciones para que se tome en cuenta en caso de que que sean diferentes de null o empty
@@ -107,10 +117,11 @@ export class LibroComponent implements OnInit{
       this.categoriaA="";
       this.editorialA="";
       this.imagenA;
-
+      
       $("#buscar").fadeOut(()=>{
         this.pnBuscar=false;
         this.pnAlta = true
+        this.formulario = "formGestionLibros";
       });
     }
 
@@ -138,20 +149,11 @@ export class LibroComponent implements OnInit{
   this.autorM = reg.autor.id;
   this.reg = reg;
   this.idx=indice;
-  this.authService.procesaOperacionGet('/api/autores/combo',this.webToken,'').subscribe({
-      next: (data:any)=>{
-        if(data.status==200){
-          this.comboAutores = data.body;
-        }
-      },
-      error:(err:HttpErrorResponse)=>{
-        swal.fire('Error:', this.authService.msgDecripcion,'error');
-      }
-    })
     $("#buscar").fadeOut(()=>{
       this.pnAlta=false;
       this.pnBuscar=false;
       this.pnModificar = true;
+      this.formulario = "formGestionLibros";
     });
   }
 
@@ -159,12 +161,12 @@ export class LibroComponent implements OnInit{
     //Funcion para guardar un registro
   onGuardar():void{
     //this.formComponent.nombre
-    this.isbnA=this.formComponent.isbn;
-    this.tituloA=this.formComponent.titulo;
-    this.categoriaA=this.formComponent.categoria;
-    this.editorialA=this.formComponent.editorial;
-    this.imagenA = this.formComponent.imagen;
-    this.autorA = this.formComponent.autorSelected;
+    this.isbnA=this.formulariosComponent.isbn;
+    this.tituloA=this.formulariosComponent.titulo;
+    this.categoriaA=this.formulariosComponent.categoria;
+    this.editorialA=this.formulariosComponent.editorial;
+    this.imagenA = this.formulariosComponent.imagen;
+    this.autorA = this.formulariosComponent.autorSelected;
     if(this.isbnA == "" || this.tituloA == "" || this.categoriaA == ""){
       swal.fire('Campos obligatorios:','Isbn,Titulo y Categoria','error');
       return;
@@ -214,13 +216,13 @@ export class LibroComponent implements OnInit{
 
     //Funcion para modificar registro Libro
     onModificar():void{
-      this.id = this.formComponent.id;
-      this.isbnM=this.formComponent.isbn;
-      this.tituloM=this.formComponent.titulo;
-      this.categoriaM=this.formComponent.categoria;
-      this.editorialM=this.formComponent.editorial;
-      this.imagenM = this.formComponent.imagen;
-      this.autorM = this.formComponent.autorSelected;
+      this.id = this.formulariosComponent.id;
+      this.isbnM=this.formulariosComponent.isbn;
+      this.tituloM=this.formulariosComponent.titulo;
+      this.categoriaM=this.formulariosComponent.categoria;
+      this.editorialM=this.formulariosComponent.editorial;
+      this.imagenM = this.formulariosComponent.imagen;
+      this.autorM = this.formulariosComponent.autorSelected;
       if(this.isbnM == "" || this.tituloM == "" || this.categoriaM == ""){
         swal.fire('Campos obligatorios:','Isbn,Titulo y Categoria','error');
         return;
@@ -324,6 +326,7 @@ export class LibroComponent implements OnInit{
         this.pnAlta= false;
         this.pnModificar= false;
         this.pnBuscar = true;
+        this.formulario = "formBuscarLibro";
       })
     }
 

@@ -12,23 +12,27 @@ export class AltaProductosComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.formulario = "formBuscarRegistroInventario";
   
   }
 
   //Función para dar de alta los productos en inventario
   onNuevo() : void{
-      this.formulario = "formAltaInventario";
+     
       $("#buscar").fadeOut(()=>{
         this.pnBuscar = false;
         this.pnAlta = true;
+        this.formulario = "formAltaInventario";
       });
   }
 
   //Función para resetear panels a origen
   onReset(panel:string) : void{
+   
     $("#"+panel).fadeOut(()=>{
       this.pnAlta = false;
       this.pnBuscar = true;
+      this.formulario = "formBuscarRegistroInventario";
     });
   }
 

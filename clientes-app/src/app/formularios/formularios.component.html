@@ -1,4 +1,118 @@
 <ng-container [ngSwitch]="formulario">
+  <!-- Formulario para búsqueda de libros-->
+  <ng-container *ngSwitchCase="'formBuscarLibro'">
+    <div class="form-group row mb-3">
+      <label for="titulo" class="col-form-label col-sm-4">Titulo:</label>
+      <div class="col-sm-8">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="tituloB"
+          name="titulo"
+        />
+      </div>
+      <label for="isbn" class="col-form-label col-sm-4 my-2">ISBN:</label>
+      <div class="col-sm-8 my-2">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="isbnB"
+          name="isbn"
+        />
+      </div>
+      <label for="editorial" class="col-form-label col-sm-4 my-2">Autor:</label>
+      <div class="col-sm-8 my-2">
+        <select
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+          [(ngModel)]="autorB"
+          name="autorSelected"
+        >
+          <option [value]="0">-- Selecciona Opcion --</option>
+          <option *ngFor="let autor of comboAutores" [value]="autor.code">
+            {{ autor.valor }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </ng-container>
+  <!-- Fin formulario búsqueda libros-->
+
+  <!-- Formulario para gestion de libros ALta/Modificar-->
+  <ng-container *ngSwitchCase="'formGestionLibros'">
+    <div class="form-group row">
+      <label for="isbn" class="col-form-label col-sm-2">ISBN</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="isbn"
+          name="isbn"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="titulo" class="col-form-label col-sm-2">Titulo</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="titulo"
+          name="titulo"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="categoria" class="col-form-label col-sm-2">Categoria</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="categoria"
+          name="categoria"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="editorial" class="col-form-label col-sm-2">Editorial</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="editorial"
+          name="editorial"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="editorial" class="col-form-label col-sm-2">Autor:</label>
+      <div class="col-sm-6">
+        <select
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+          [(ngModel)]="autorSelected"
+          name="autorSelected"
+        >
+          <option [value]="0">-- Selecciona Opcion --</option>
+          <option *ngFor="let autor of comboAutores" [value]="autor.code">
+            {{ autor.valor }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="editorial" class="col-form-label col-sm-2">Imagen:</label>
+      <div class="col-sm-6">
+        <input type="file" (change)="onFileSelected($event)" name="imagen" />
+      </div>
+    </div>
+  </ng-container>
+  <!-- Fin para gestionar libros-->
+  <!-- Formulario para alta de invetario productos-->
   <ng-container *ngSwitchCase="'formAltaInventario'">
     <div class="form-group row">
       <label for="editorial" class="col-form-label col-sm-2">Libros:</label>
@@ -10,7 +124,7 @@
         >
           <!--<option [value]="0">-- Selecciona Opcion --</option>
                 <option *ngFor="let autor of comboAutores" [value]="autor.code">
-                  {{ autor.valor }}
+                    {{ autor.valor }}
                 </option>-->
         </select>
       </div>
@@ -46,4 +160,19 @@
       </div>
     </div>
   </ng-container>
+  <!-- Fin formulario alta de invetario productos-->
+  <!-- Formulario para búsqueda de registros en gestion de inventarios-->
+  <ng-container *ngSwitchCase="'formBuscarRegistroInventario'">
+    <div class="form-group row mb-3">
+      <label for="isbn" class="col-form-label col-sm-4">ISBN:</label>
+      <div class="col-sm-8">
+        <input type="text" name="isbn" class="form-control" />
+      </div>
+      <label for="titulo" class="col-form-label col-sm-4 my-2">Titulo:</label>
+      <div class="col-sm-8 my-2">
+        <input type="text" name="titulo" class="form-control" />
+      </div>
+    </div>
+  </ng-container>
+  <!-- Fin formulario búsqueda de registros en gestión de inventarios-->
 </ng-container>

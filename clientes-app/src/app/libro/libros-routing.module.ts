@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { LibroComponent } from './libro.component';
-import { FormComponent } from './form.component';
 import { FormsModule } from '@angular/forms';
 import { ModalsComponent } from './modals.component';
+import { SharedModulesModule } from '../shared-modules/shared-modules.module';
 
 
 const routes : Routes =[
@@ -13,9 +13,10 @@ const routes : Routes =[
 
 
 @NgModule({
-  declarations: [LibroComponent,FormComponent,ModalsComponent],
+  declarations: [LibroComponent,ModalsComponent],
   imports: [
     CommonModule,
+    SharedModulesModule,
     FormsModule,
     RouterModule.forChild(routes)
   ]
