@@ -5,8 +5,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './formularios.component.html'
 })
 export class FormulariosComponent {
-  //Varibles para invocar el formulario
+  //Varibles globlales del componente
   @Input() formulario : string = "";
+  @Input() nombreB : string = "";
 
   //Variables para formularios catálogo de libros
   @Input() id:Number = 0;
@@ -22,6 +23,10 @@ export class FormulariosComponent {
   @Input() isbnB : string = "";
   @Input() autorB : Number = 0;
   //Fin de variables formularios catálogos libros
+
+  //Variables para formulario autores
+  @Input() apellido : string = "";
+  //Fin varaibles autores 
 
   //Variable para seleccionar una imagen para los forms
   @Output() imagenSeleccionada : EventEmitter<File> = new EventEmitter<File>();

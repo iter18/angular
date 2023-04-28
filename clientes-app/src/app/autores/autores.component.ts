@@ -2,8 +2,8 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../app.service';
-import { FormComponent } from './form.component'
 import swal from 'sweetalert2';
+import { FormulariosComponent } from '../formularios/formularios.component';
 
 
 
@@ -14,7 +14,7 @@ import swal from 'sweetalert2';
 export class AutoresComponent implements OnInit{
 
   /**Para poder ocupaar los componentes de otro es necesario  */
- @ViewChild(FormComponent) formComponent!: FormComponent;
+ @ViewChild(FormulariosComponent) formComponent!: FormulariosComponent;
 
   nombreB: string = "";
   nombreA :string="";
@@ -30,6 +30,7 @@ export class AutoresComponent implements OnInit{
   listaAutores : any[] = [];
   reg : any = null;
   idx :number =0;
+  formulario : string = "";
 
   constructor(
     private authService : AuthService,
@@ -43,13 +44,16 @@ export class AutoresComponent implements OnInit{
     if(this.webToken === ""|| this.webToken === null){
       this.router.navigate(['login'])
     }
+    this.formulario = "formBuscarAutor";
+  }
+  ngAfterViewInit(){
     this.onBuscar();
-    
   }
 
   //funcion para obtener una lista de autores
   onBuscar() : void{
     this.listaAutores = [];
+    this.nombreB = this.formComponent.nombreB;
     let p = new HttpParams();
     p = p.append('nombreAutor',this.nombreB.trim());
     this.authService.procesaOperacionGet('/api/autores',this.webToken,p).subscribe({
@@ -69,11 +73,12 @@ export class AutoresComponent implements OnInit{
 
   //Función para llamar form de crear
   onNuevo():void{
-    this.nombreA="";
+    this.nombreA=""; 
     this.apellidoA="";
     $("#buscar").fadeOut(()=>{
       this.pnBuscar=false;
-      this.pnAlta = true
+      this.pnAlta = true;
+      this.formulario = "formGestionAutores";
     });
   }
   //Funcion para llamar form/panel modificar
@@ -86,6 +91,7 @@ export class AutoresComponent implements OnInit{
       this.pnAlta=false;
       this.pnBuscar=false;
       this.pnModificar = true;
+      this.formulario = "formGestionAutores";
     });
   }
 //Funcion para guardar un registro autor
@@ -169,7 +175,7 @@ export class AutoresComponent implements OnInit{
                 this.listaAutores[this.idx] = response.body;
                 swalWithBootstrapButtons.fire(
                   'Modificado!',
-                  'El registro seleccionado ha sido guardado',
+                  'El registro seleccionado ha sido modificado',
                   'success'
                 )
                this.onReset("modificar"); 
@@ -231,6 +237,7 @@ export class AutoresComponent implements OnInit{
       this.pnAlta= false;
       this.pnModificar= false;
       this.pnBuscar = true;
+      this.formulario = "formBuscarAutor";
     })
   }
 

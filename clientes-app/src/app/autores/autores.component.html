@@ -47,17 +47,8 @@
   <div class="card mt-3 mx-auto" style="width: 18rem">
     <div class="card-header text-dark bg-warning">Filtro de búsqueda</div>
     <div class="card-body">
-      <div class="form-group row mb-3">
-        <label for="nombre" class="col-form-label col-sm-4">Nombre:</label>
-        <div class="col-sm-8">
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="nombreB"
-            name="nombre"
-          />
-        </div>
-      </div>
+      <app-formularios [formulario]="formulario" [nombreB]="nombreB">
+      </app-formularios>
       <button class="btn btn-primary mx-2" (click)="onBuscar()">Buscar</button>
       <button class="btn btn-success" (click)="onNuevo()">Nuevo</button>
     </div>
@@ -69,7 +60,11 @@
   <div class="card bg-dark text-white mx-5">
     <div class="card-header bg-primary">Registro nuevo autor</div>
     <div class="card-body">
-      <app-form [nombre]="nombreA" [apellido]="apellidoA"></app-form>
+      <app-formularios
+        [formulario]="formulario"
+        [nombre]="nombreA"
+        [apellido]="apellidoA"
+      ></app-formularios>
       <div class="form-group row my-2">
         <div class="col-sm-6">
           <button
@@ -107,7 +102,11 @@
   <div class="card bg-dark text-white mx-5">
     <div class="card-header bg-primary">Modificar registro autor</div>
     <div class="card-body">
-      <app-form [nombre]="nombreM" [apellido]="apellidoM"></app-form>
+      <app-formularios
+        [formulario]="formulario"
+        [nombre]="nombreM"
+        [apellido]="apellidoM"
+      ></app-formularios>
       <div class="form-group row my-2">
         <div class="col-sm-6">
           <button
