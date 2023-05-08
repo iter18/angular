@@ -28,6 +28,16 @@ export class FormulariosComponent {
   @Input() apellido : string = "";
   //Fin varaibles autores 
 
+  //variables para gestion de inventario
+  @Input() comboLibros : any[] = [];
+  @Input() libroSelected : Number = 0;
+
+  //Variable para gestion de inventario
+  @Input() autor : string = "";
+  @Input() stock : Number = 0;
+  @Input() precio : number = 0.0;
+  @Input() minimo : number = 0;
+
   //Variable para seleccionar una imagen para los forms
   @Output() imagenSeleccionada : EventEmitter<File> = new EventEmitter<File>();
 
@@ -37,6 +47,20 @@ export class FormulariosComponent {
     this.imagenSeleccionada.emit(file);
   }
 
+  //variable para saber el id seleccionado de un combo para eventos change
+  @Output() idSelect : EventEmitter<number> = new EventEmitter<number>();
+
+  //función para enviar ids seleccionados al componente padre
+  onIdSelected(event  : any){
+
+    const id = event.target.value;
+  
+    //console.log(selectedOption);
+
+
+    this.idSelect.emit(id);
+
+  }
   
 
 }

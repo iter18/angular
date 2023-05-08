@@ -129,7 +129,7 @@
   </ng-container>
   <!-- fin formulario búsqueda autor-->
   <!-- Formulario para gestion autores Alta/modificación-->
-  <ng-container *ngSwitchCase="'formGestionAutores'"> 
+  <ng-container *ngSwitchCase="'formGestionAutores'">
     <div class="form-group row">
       <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
       <div class="col-sm-6">
@@ -166,42 +166,67 @@
           class="form-select form-select-sm"
           aria-label=".form-select-sm example"
           name="libroSelected"
+          (change)="onIdSelected($event)"
         >
-          <!--<option [value]="0">-- Selecciona Opcion --</option>
-                <option *ngFor="let autor of comboAutores" [value]="autor.code">
-                    {{ autor.valor }}
-                </option>-->
+          <option [value]="0">-- Selecciona Opcion --</option>
+          <option *ngFor="let libro of comboLibros" [value]="libro.code">
+            {{ libro.valor }}
+          </option>
         </select>
       </div>
     </div>
     <div class="form-group row my-2">
       <label for="isbn" class="col-form-label col-sm-2">ISBN:</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" />
+        <input type="text" class="form-control" [(ngModel)]="isbn" />
       </div>
     </div>
     <div class="form-group row my-2">
       <label for="autor" class="col-form-label col-sm-2">Autor:</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" />
+        <input type="text" class="form-control" [(ngModel)]="autor" />
       </div>
     </div>
     <div class="form-group row my-2">
       <label for="editorial" class="col-form-label col-sm-2">Editorial:</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" />
+        <input type="text" class="form-control" [(ngModel)]="editorial" />
       </div>
     </div>
     <div class="form-group row my-2">
       <label for="stock" class="col-form-label col-sm-2">Stock:</label>
       <div class="col-sm-6">
-        <input type="text" name="stock" class="form-control" required />
+        <input
+          type="text"
+          name="stock"
+          class="form-control"
+          [(ngModel)]="stock"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="stock" class="col-form-label col-sm-2">Minimo:</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          name="minimo"
+          class="form-control"
+          [(ngModel)]="minimo"
+          required
+        />
       </div>
     </div>
     <div class="form-group row my-2">
       <label for="precio" class="col-form-label col-sm-2">Precio:</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" />
+        <input
+          type="text"
+          class="form-control"
+          name="precio"
+          [(ngModel)]="precio"
+          required
+        />
       </div>
     </div>
   </ng-container>

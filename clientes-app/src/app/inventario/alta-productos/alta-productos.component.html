@@ -52,23 +52,39 @@
   <div class="card bg-dark text-white mx-5">
     <div class="card-header bg-primary">Alta stock de producto</div>
     <div class="row g-0">
-      <div class="col-md-4">
-        <img src="" alt="" class="img-fluid rounded-start" />
+      <div class="col-md-4 text-center">
+        <img
+          [src]="src"
+          alt=""
+          class="img-fluid rounded-start p-3"
+          style="width: 80%"
+        />
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <app-formularios [formulario]="formulario"></app-formularios>
+          <app-formularios
+            [formulario]="formulario"
+            [comboLibros]="comboLibros"
+            [isbn]="isbn"
+            [autor]="autor"
+            [editorial]="editorial"
+            [precio]="precio"
+            [stock]="stock"
+            [minimo]="minimo"
+            (idSelect)="onDetalleLibro($event)"
+          ></app-formularios>
           <div class="form-group row my-2">
             <div class="col-sm-6">
               <button class="btn btn-primary mx-2" role="button">
-                <!--<span
+                <span
                   class="spinner-border spinner-border-sm spinnerB"
                   role="status"
                   aria-hidden="true"
                   *ngIf="spinnerLoad"
                 ></span>
                 <span class="sr-only spinnerB" *ngIf="spinnerLoad"
-                  >Enviando...</span>-->
+                  >Enviando...</span
+                >
                 <span id="txtCrear">Registrar</span>
               </button>
               <button
