@@ -10,7 +10,7 @@ export class FormulariosComponent {
   @Input() nombreB : string = "";
 
   //Variables para formularios catálogo de libros
-  @Input() id:Number = 0;
+  @Input() id:number = 0;
   @Input() isbn:string="";
   @Input() titulo:string="";
   @Input() categoria:string="";
@@ -34,7 +34,7 @@ export class FormulariosComponent {
 
   //Variable para gestion de inventario
   @Input() autor : string = "";
-  @Input() stock : Number = 0;
+  @Input() stock : number = 0;
   @Input() precio : number = 0.0;
   @Input() minimo : number = 0;
 

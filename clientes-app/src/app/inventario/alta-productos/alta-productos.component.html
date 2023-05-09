@@ -27,9 +27,12 @@
           </tr>
         </thead>
         <tbody>
-          <!--<ng-container
-              *ngTemplateOutlet="filaLibro; context: { $implicit: listaLibros }"
-            ></ng-container>-->
+          <ng-container
+            *ngTemplateOutlet="
+              contentListaInventario;
+              context: { $implicit: listaInventario }
+            "
+          ></ng-container>
         </tbody>
       </table>
     </div>
@@ -64,6 +67,7 @@
         <div class="card-body">
           <app-formularios
             [formulario]="formulario"
+            [id]="idLibro"
             [comboLibros]="comboLibros"
             [isbn]="isbn"
             [autor]="autor"
@@ -75,17 +79,22 @@
           ></app-formularios>
           <div class="form-group row my-2">
             <div class="col-sm-6">
-              <button class="btn btn-primary mx-2" role="button">
+              <button
+                class="btn btn-primary mx-2"
+                role="button"
+                [disabled]="waitResponse"
+                (click)="onGuardar()"
+              >
                 <span
                   class="spinner-border spinner-border-sm spinnerB"
                   role="status"
                   aria-hidden="true"
                   *ngIf="spinnerLoad"
                 ></span>
-                <span class="sr-only spinnerB" *ngIf="spinnerLoad"
+                <span class="sr-only spinner" *ngIf="spinnerLoad"
                   >Enviando...</span
                 >
-                <span id="txtCrear">Registrar</span>
+                <span id="txtBtn">Registrar</span>
               </button>
               <button
                 class="btn btn-danger"
@@ -100,4 +109,16 @@
       </div>
     </div>
   </div>
+</ng-template>
+<!-- Template para contenido de tabla-->
+<ng-template #contentListaInventario let-listaInventario>
+  <tr
+    class="text-center"
+    *ngFor="let inventario of listaInventario; let i = index"
+  >
+    <td>{{ inventario.libro.isbn }}</td>
+    <td>{{ inventario.libro.titulo }}</td>
+    <td>{{ inventario.stock }}</td>
+    <td>{{ inventario.precio }}</td>
+  </tr>
 </ng-template>

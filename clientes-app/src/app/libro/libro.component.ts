@@ -35,7 +35,7 @@ export class LibroComponent implements OnInit{
   src : string = "";
   autorA:Number = 0;
   /**Variables para modificar registro de libro */
-  id : Number = 0;
+  id : number = 0;
   isbnM:string="";
   tituloM:string="";
   categoriaM:string="";
