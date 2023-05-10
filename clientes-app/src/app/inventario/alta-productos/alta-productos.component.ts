@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/app.service';
@@ -29,6 +29,7 @@ export class AltaProductosComponent implements OnInit {
   waitResponse : boolean = false;
   listaInventario : any[] = [];
   idLibro : number = 0;
+  titulo : string = "";
 
   constructor(private authService:AuthService,
               private router : Router){}
@@ -42,7 +43,12 @@ export class AltaProductosComponent implements OnInit {
 
     this.formulario = "formBuscarRegistroInventario";
     this.llenaComboLibros();
+   
   
+  }
+
+  ngAfterViewInit(){
+    this.onBuscar();
   }
 
 
@@ -57,8 +63,32 @@ export class AltaProductosComponent implements OnInit {
       });
   }
 
-  //funcion para registrar producto en inventario
+  //funcion para buscar en inventarios
+  onBuscar(){
+      this.isbn = this.formulariosComponent.isbnB;
+      this.titulo = this.formulariosComponent.tituloB;
+      this.listaInventario = [];
+      let p = new HttpParams();
+      if(this.isbn != ""){
+        p = p.append('isbnLibro',this.isbn.trim());
+      }
+      if(this.titulo != ""){
+        p = p.append('tituloLibro',this.titulo.trim());
+      }
 
+      this.authService.procesaOperacionGet('/api/inventarios/buscarProductos',this.webToken,p).subscribe({
+        next : (data : any) =>{
+          if(data.status == 200){
+              this.listaInventario = data.body;
+          }
+        },
+        error : (error : HttpErrorResponse) =>{
+          swal.fire('Error:',this.authService.msgDecripcion,'error');
+        }
+      });
+  }
+
+  //funcion para registrar producto en inventario
   onGuardar() : void {
     this.stock = this.formulariosComponent.stock;
     this.minimo = this.formulariosComponent.minimo;
