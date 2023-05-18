@@ -15,7 +15,6 @@ const routes : Routes = [
   imports: [
     CommonModule,
     SharedModulesModule,
-    FormsModule,
     RouterModule.forChild(routes)
   ]
 })

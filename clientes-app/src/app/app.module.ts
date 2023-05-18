@@ -17,6 +17,9 @@ import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ContextMenuModule} from 'primeng/contextmenu'
+import { MenuModule } from 'primeng/menu';
 //import { LibroComponent } from './libro/libro.component';
 //import { AutoresComponent } from './autores/autores.component';
 //import { JwtInterceptor } from './jwt-interceptor';
@@ -75,8 +78,11 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     //Libreria para permitir peticiones Http
     HttpClientModule,
+    ContextMenuModule,
+    MenuModule,
     //Libreria para trabajar con formularios
     FormsModule,
     //registramos las rutas

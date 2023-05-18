@@ -1,1 +1,83 @@
-<p>gestion-productos works!</p>
+<p-menu
+  #menu
+  [popup]="true"
+  [model]="opciones"
+></p-menu>
+<div class="card border-primary mb-3">
+  <div class="card-header text-white bg-dark">PANEL GESTIÓN PRODUCTOS</div>
+  <div class="card-body">
+    <!-- panel para filtros de búsqueda-->
+    <div *ngIf="pnBuscar" id="buscar">
+      <ng-container *ngTemplateOutlet="templateBuscar"></ng-container>
+    </div>
+  </div>
+  <div class="card border-primary mb-3 mx-2">
+    <div class="card-header text-white bg-primary">Lista de productos</div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead class="text-center">
+          <tr>
+            <th>ISBN</th>
+            <th>TITULO</th>
+            <th>STOCK</th>
+            <th>MINIMO</th>
+            <th>PRECIO</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngTemplateOutlet="
+              contentListaInventario;
+              context: { $implicit: listaInventario }
+            "
+          ></ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Template de los componentes-->
+<!-- Template para búsqueda-->
+<ng-template #templateBuscar>
+  <div class="card mt-3 mx-auto" style="width: 20rem">
+    <div class="card-header text-dark bg-warning">Filtro de búsqueda</div>
+    <div class="card-body">
+      <app-formularios
+        [formulario]="formulario"
+        [isbnB]="isbn"
+        [tituloB]="titulo"
+      >
+      </app-formularios>
+      <button class="btn btn-primary mx-2">Buscar</button>
+      <button class="btn btn-success">Nuevo</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Template para contenido de tabla-->
+<ng-template #contentListaInventario let-listaInventario>
+  <tr
+    class="text-center"
+    *ngFor="let inventario of listaInventario; let i = index"
+  >
+    <div pContextMenu="menuItems" (contextmenu)="showContextMenu($event)">
+      dsdssdds
+    </div>
+    <td>{{ inventario.libro.isbn }}</td>
+    <td>{{ inventario.libro.titulo }}</td>
+    <td>{{ inventario.stock }}</td>
+    <td>{{ inventario.minimo }}</td>
+    <td>{{ inventario.precio }}</td>
+    <td>
+      <button
+        class="btn btn-secondary"
+        type="button"
+        (click)="toogleMenu(menu, $event, inventario, i)"
+      >
+        <i class="fa-solid fa-gears"></i>
+      </button>
+    </td>
+  </tr>
+</ng-template>
