@@ -24,6 +24,7 @@ export class GestionProductosComponent implements OnInit {
   opciones : MenuItem[] =[];
   idx : number = 0;
   reg : any;
+  selectedRow : any;
 
   constructor(private router : Router, private authService : AuthService){}
 
@@ -41,28 +42,22 @@ export class GestionProductosComponent implements OnInit {
 
     this.menuItems = [
       {
-        label : 'Opcion 1',
-        command:() => null
+        label : 'Opcion 1'
+     
       },
       {
-        label : 'Opcion 2',
-        command : () => null
+        label : 'Opcion 2'
+     
       }
     ];
 
     this.opciones = [
-      {
-        label : 'Nuevo',
-        icon : 'fa fa-plus',
-        command : () =>{
-          console.log("first");
-        }
-      },
+
       {
         label : 'Editar',
         icon : 'fa fa-pencil',
         command : () =>{
-          console.log("second");
+          this.onEditarPanel();
         }
       },
       {
@@ -93,9 +88,7 @@ export class GestionProductosComponent implements OnInit {
     this.onBuscar();
   }
 
-  showContextMenu(event: MouseEvent) {
-    event.preventDefault();
-  }
+
 
 
 
@@ -127,10 +120,29 @@ export class GestionProductosComponent implements OnInit {
     });
   }
 
+
+
+  //Función para invocar menu de opciones
   toogleMenu(menu : any ,event : any,rowData : any ,idx : number) : void {
     this.idx = idx;
     this.reg = rowData;
     menu.toggle(event);
   }
+    //Función para mostrar menu al dar click derecho
+    showContextMenu(event: any, rowData : any ,idx : number) {
+
+      this.idx = idx;
+      this.reg = rowData;
+      event.preventDefault();
+     // this.selectedRow = rowData;
+    }
+
+    //función para mostrar panel de editar el registro
+  onEditarPanel() : void{
+    console.log("registro: "+ this.reg.stock);
+  }
+
+
+
 
 }
