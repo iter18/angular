@@ -25,6 +25,11 @@ export class GestionProductosComponent implements OnInit {
   idx : number = 0;
   reg : any;
   selectedRow : any;
+  modalTemplate : string = "";
+  inputsModal : any[] = [];
+  src : string = "";
+  idInventario : number = 0;
+  typeForm : string = "";
 
   constructor(private router : Router, private authService : AuthService){}
 
@@ -57,7 +62,7 @@ export class GestionProductosComponent implements OnInit {
         label : 'Editar',
         icon : 'fa fa-pencil',
         command : () =>{
-          this.onEditarPanel();
+          this.onEditarModal();
         }
       },
       {
@@ -90,9 +95,6 @@ export class GestionProductosComponent implements OnInit {
 
 
 
-
-
-
   //funcion para buscar en inventarios
   onBuscar(): void {
     this.isbn = this.formulariosComponent.isbnB;
@@ -120,6 +122,14 @@ export class GestionProductosComponent implements OnInit {
     });
   }
 
+  onModificar(formData: any ) : void{
+    console.log("respuesta: "+formData.idInventario);
+    console.log("respuesta: "+formData.stock);
+    console.log("respuesta: "+formData.minimo);
+    console.log("respuesta: "+formData.precio);
+    console.log("respuesta: "+formData.isbn);
+  }
+
 
 
   //Función para invocar menu de opciones
@@ -130,16 +140,70 @@ export class GestionProductosComponent implements OnInit {
   }
     //Función para mostrar menu al dar click derecho
     showContextMenu(event: any, rowData : any ,idx : number) {
-
       this.idx = idx;
       this.reg = rowData;
       event.preventDefault();
-     // this.selectedRow = rowData;
     }
 
-    //función para mostrar panel de editar el registro
-  onEditarPanel() : void{
-    console.log("registro: "+ this.reg.stock);
+    //función para mostrar modal de editar el registro del producto
+  onEditarModal() : void{
+    
+    this.showModal(this.reg,'inputs');
+  }
+
+  //función para llamar modalBox
+  showModal(reg:any, type:string) : void {
+
+    setTimeout(() => {
+            $('#myModal').modal('show');
+          }, 300); 
+    if(type == "inputs"){
+        this.src = './assets/uplodas/'+reg.libro.rutaFoto;
+        this.idInventario = reg.id;
+        this.typeForm = "formGestionInventario";
+        this.modalTemplate = 'inputs';
+          this.inputsModal = [
+            {
+              id :'isbn', 
+              label : 'ISBN',
+              value : reg.libro.isbn, 
+              type : 'text',
+              disable : true
+            },
+            {
+              id :'titulo',
+              label : 'Titulo',
+              value : reg.libro.titulo,
+              type : 'text',
+              disable : true
+            },
+            {
+              id : 'editorial',
+              label : 'EDITORIAL',
+              value : reg.libro.editorial,
+              type : 'text',
+              disable : true
+            },
+            {
+              id : 'stock',
+              label : 'STOCK',
+              value : reg.stock,
+              type : 'text'
+            },
+            {
+              id : 'minimo',
+              label : 'MINIMO',
+              value : reg.minimo,
+              type : 'text'
+            },
+            {
+              id : 'precio',
+              label : 'PRECIO',
+              value : reg.precio,
+              type : 'text'
+            }
+          ];
+    }
   }
 
 

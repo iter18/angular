@@ -30,6 +30,8 @@ export class AltaProductosComponent implements OnInit {
   listaInventario : any[] = [];
   idLibro : number = 0;
   titulo : string = "";
+  isbnB : string = "";
+  tituloB : string = "";
 
   constructor(private authService:AuthService,
               private router : Router){}
@@ -65,8 +67,8 @@ export class AltaProductosComponent implements OnInit {
 
   //funcion para buscar en inventarios
   onBuscar(){
-      this.isbn = this.formulariosComponent.isbnB;
-      this.titulo = this.formulariosComponent.tituloB;
+      this.isbnB = this.formulariosComponent.isbnB;
+      this.tituloB = this.formulariosComponent.tituloB;
       this.listaInventario = [];
       let p = new HttpParams();
       if(this.isbn != ""){

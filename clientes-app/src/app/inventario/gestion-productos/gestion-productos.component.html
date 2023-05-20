@@ -70,3 +70,13 @@
     </div>
   </div>
 </ng-template>
+<!-- Fin de templates-->
+
+<app-modales
+  [template]="modalTemplate"
+  [inputs]="inputsModal"
+  [image]="src"
+  [idInventario]="idInventario"
+  (eventEmitter)="onModificar($event)"
+  [typeForm]="typeForm"
+></app-modales>

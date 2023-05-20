@@ -15,7 +15,7 @@ export class ModalsComponent {
   @Input() editorial: string="";
   @Input() autor: string="";
   @Input() inputs: any;
-  safeImageUrl: SafeUrl ="";;
+  safeImageUrl: SafeUrl ="";
 
   constructor(private sanitizer: DomSanitizer) { }
 
