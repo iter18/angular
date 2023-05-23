@@ -4,21 +4,24 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/app.service';
 import { FormulariosComponent } from 'src/app/formularios/formularios.component';
 import swal from 'sweetalert2';
-import { MenuItem,PrimeIcons } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-gestion-productos',
-  templateUrl: './gestion-productos.component.html'
+  templateUrl: './gestion-productos.component.html',
+  styleUrls : ['./gestion-productos-component.css']
 })
 export class GestionProductosComponent implements OnInit {
 
-  @ViewChild(FormulariosComponent) formulariosComponent!: FormulariosComponent;
+  @ViewChild(FormulariosComponent) formulariosComponen!: FormulariosComponent;
 
   webToken : any;
   pnBuscar : boolean = true;
   formulario : string = "";
   isbn : string = "";
+  isbnB : string = "";
   titulo : string = "";
+  tituloB : string = "";
   listaInventario : any[] = [];
   menuItems : MenuItem[] = [];
   opciones : MenuItem[] =[];
@@ -28,8 +31,24 @@ export class GestionProductosComponent implements OnInit {
   modalTemplate : string = "";
   inputsModal : any[] = [];
   src : string = "";
+  srcNuevo : string = "";
   idInventario : number = 0;
   typeForm : string = "";
+  pnAlta : boolean = false;
+  idLibro : number = 0;
+  comboLibros : any[] = [];
+  autor : string = "";
+  editorial : string = "";
+  precio : number = 0.0;
+  stock : number = 0;
+  minimo : number = 0;
+  precioM : number = 0.0;
+  stockM : number = 0;
+  minimoM : number = 0;
+  panelAltaProducto : boolean = false;
+  tituloModal : string = "";
+  tempAlta : boolean = false;
+
 
   constructor(private router : Router, private authService : AuthService){}
 
@@ -42,27 +61,16 @@ export class GestionProductosComponent implements OnInit {
       this.router.navigate(['login'])
     }
 
-
     this.formulario = "formBuscarRegistroInventario";
-
-    this.menuItems = [
-      {
-        label : 'Opcion 1'
-     
-      },
-      {
-        label : 'Opcion 2'
-     
-      }
-    ];
-
+    $("#panelNuevoP").hide();
+    this.llenaComboLibros();
     this.opciones = [
 
       {
         label : 'Editar',
         icon : 'fa fa-pencil',
         command : () =>{
-          this.onEditarModal();
+          this.showModal('editar');
         }
       },
       {
@@ -76,7 +84,7 @@ export class GestionProductosComponent implements OnInit {
         label : 'Reorden',
         icon : 'fa-solid fa-boxes-stacked',
         command : () =>{
-          console.log("second");
+          this.showModal('reorden');
         }
       },
       {
@@ -97,17 +105,17 @@ export class GestionProductosComponent implements OnInit {
 
   //funcion para buscar en inventarios
   onBuscar(): void {
-    this.isbn = this.formulariosComponent.isbnB;
-    this.titulo = this.formulariosComponent.tituloB;
+    this.isbnB = this.formulariosComponen.isbnB;
+    this.tituloB = this.formulariosComponen.tituloB;
     this.listaInventario = [];
 
     let p = new HttpParams();
 
-    if(this.isbn != ""){
-      p = p.append('isbnLibro',this.isbn.trim());
+    if(this.isbnB != ""){
+      p = p.append('isbnLibro',this.isbnB.trim());
     }
-    if(this.titulo != ""){
-      p = p.append('tituloLibro',this.titulo.trim());
+    if(this.tituloB != ""){
+      p = p.append('tituloLibro',this.tituloB.trim());
     }
 
     this.authService.procesaOperacionGet('/api/inventarios/buscarProductos',this.webToken,p).subscribe({
@@ -122,13 +130,160 @@ export class GestionProductosComponent implements OnInit {
     });
   }
 
-  onModificar(formData: any ) : void{
-    console.log("respuesta: "+formData.idInventario);
-    console.log("respuesta: "+formData.stock);
-    console.log("respuesta: "+formData.minimo);
-    console.log("respuesta: "+formData.precio);
-    console.log("respuesta: "+formData.isbn);
+  //Función para llenar combo libros
+  llenaComboLibros() : void {
+    this.authService.procesaOperacionGet('/api/libros/combo',this.webToken,'').subscribe({
+      next : (data : any) => {
+        if(data.status == 200){
+          this.comboLibros = data.body;
+        } 
+      },
+      error : (error : HttpErrorResponse) => {
+        swal.fire('Error:',this.authService.msgDecripcion,'error');
+      }
+    });
   }
+  //función para registrar nuevo producto en inventario
+  onGuardar() : void {
+    
+    this.stock = this.formulariosComponen.stock;
+    this.minimo = this.formulariosComponen.minimo;
+    this.precio = this.formulariosComponen.precio;
+    this.idLibro = this.formulariosComponen.id;
+    
+    if(this.stock == null || this.stock<=0 ||
+      this.minimo == null || this.minimo<=0 ||
+      this.precio == null || this.precio<=0){
+        swal.fire('Campos obligatorios:','Sotck,minimo y precio','error');
+        return;
+    }
+    this.pnAlta = true;
+    let body : {
+      idLibro : number,
+      idMovimiento : number,
+      stock : number,
+      minimo : number,
+      precio : number
+    } = {
+      idLibro : 0,
+      idMovimiento : 0,
+      stock : 0,
+      minimo : 0,
+      precio :0.0,
+    }
+    body.idLibro = this.idLibro;
+    body.idMovimiento = 1;
+    body.stock = this.stock;
+    body.minimo = this.minimo;
+    body.precio = this.precio;
+
+    this.authService.procesaOperacionPost('/api/inventarios/altaProducto',this.webToken,body).subscribe({
+      next : (reg : any) =>{
+        if(reg.status == 201){
+            this.pnAlta = false;
+            swal.fire('Registro éxitoso!','El producto fue dado de alta en el inventario','success');
+            this.listaInventario.push(reg.body);
+        }
+      },
+      error : (error : HttpErrorResponse) => {
+        this.pnAlta = false;
+        swal.fire('Error:', this.authService.msgDecripcion,'error');
+      }
+    });
+  }
+
+  //función para modificar registro
+  onModificar(formData: any ) : void{
+
+    this.stockM = formData.stock;
+    this.minimoM = formData.minimo;
+    this.precioM = formData.precio;
+    this.idInventario = formData.idInventario;
+
+    if(this.stockM == null || this.stockM<=0 ||
+      this.minimoM == null || this.minimoM<=0 ||
+      this.precioM == null || this.precioM<=0){
+        swal.fire('Campos obligatorios:','Sotck,minimo y precio','error');
+        return;
+    }
+
+    const confirm = swal.mixin({
+      customClass : {
+        confirmButton : 'btn btn-success',
+        cancelButton : 'btn btn-danger'
+      },
+      buttonsStyling : false
+    }); 
+    confirm.fire({
+      title: 'Confirmación',
+      text: `Esta seguro de modificar este registro?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, modificar!',
+      cancelButtonText: 'No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+        if(result.isConfirmed){
+          
+            let body : {
+                idInventario : number,
+                idMovimiento : number,
+                stock : number,
+                minimo : number,
+                precio : number
+            } = {
+                idInventario : 0,
+                idMovimiento : 0,
+                stock : 0,
+                minimo : 0,
+                precio : 0.0
+            }
+            body.idInventario = this.idInventario;
+            body.idMovimiento = 5;
+            body.stock = this.stockM;
+            body.minimo = this.minimo;
+            body.precio = this.precioM;
+        
+            this.authService.procesaOperacionPut('/api/inventarios/modificarProducto',this.webToken,body).subscribe({
+              next : (reg : any) => {
+                if(reg.status == 201){
+                  this.listaInventario[this.idx] = reg.body;
+                  confirm.fire(
+                    'Modificado!',
+                    'El registro seleccionado ha sido guardado',
+                    'success'
+                  )
+                  $('#myModal').modal('hide');
+                }
+              },
+              error : (error : HttpErrorResponse) => {
+        
+              }
+            });
+        }
+    });
+
+    
+  }
+
+    //funcion para obtener un registro unico por ID
+    onDetalleLibro(id : any ) : void{
+      this.authService.procesaOperacionGet('/api/libros/'+id,this.webToken,'').subscribe({
+        next : (reg : any) => {
+          if(reg.status == 200){
+           // this.resetVaribles();
+            this.idLibro = reg.body.libro.id;
+            this.isbn = reg.body.libro.isbn;
+            this.autor = reg.body.autor.nombre+" "+reg.body.autor.apellido;
+            this.editorial = reg.body.libro.editorial;
+            this.srcNuevo ="./assets/uplodas/"+reg.body.libro.rutaFoto;
+          }
+        },
+        error : (error : HttpErrorResponse) => {
+          swal.fire('Error:',this.authService.msgDecripcion,'error');
+        }
+      });
+    }
 
 
 
@@ -145,23 +300,34 @@ export class GestionProductosComponent implements OnInit {
       event.preventDefault();
     }
 
-    //función para mostrar modal de editar el registro del producto
-  onEditarModal() : void{
-    
-    this.showModal(this.reg,'inputs');
-  }
-
+    //funcion para mostrar panel de alta
+    onPanelNuevo() : void {
+      //this.resetVaribles();
+      this.formulario = "formAltaInventario";
+      $("#buscar").fadeOut(()=>{
+        this.pnBuscar = false;
+        this.tempAlta = true;
+        $("#panelNuevoP").fadeIn(()=>{
+          this.pnAlta = false;
+        });
+        
+      });
+    }
+ 
   //función para llamar modalBox
-  showModal(reg:any, type:string) : void {
+  showModal(type:string) : void {
+    let reg = this.reg;
 
+   // this.resetVaribles();
     setTimeout(() => {
             $('#myModal').modal('show');
           }, 300); 
-    if(type == "inputs"){
-        this.src = './assets/uplodas/'+reg.libro.rutaFoto;
-        this.idInventario = reg.id;
+    if(type == "editar"){
+        this.src = './assets/uplodas/'+this.reg.libro.rutaFoto;
+        this.idInventario = this.reg.id;
         this.typeForm = "formGestionInventario";
         this.modalTemplate = 'inputs';
+        this.tituloModal = "Modificar Producto";
           this.inputsModal = [
             {
               id :'isbn', 
@@ -204,9 +370,70 @@ export class GestionProductosComponent implements OnInit {
             }
           ];
     }
+    if(type == "reorden"){
+      this.src = './assets/uplodas/'+reg.libro.rutaFoto;
+      this.idInventario = reg.id;
+      this.typeForm = "formGestionInventario";
+      this.modalTemplate = 'inputs';
+      this.tituloModal = "Reorden Producto";
+        this.inputsModal = [
+          {
+            id :'isbn', 
+            label : 'ISBN',
+            value : reg.libro.isbn, 
+            type : 'text',
+            disable : true
+          },
+          {
+            id :'titulo',
+            label : 'Titulo',
+            value : reg.libro.titulo,
+            type : 'text',
+            disable : true
+          },
+          {
+            id : 'editorial',
+            label : 'EDITORIAL',
+            value : reg.libro.editorial,
+            type : 'text',
+            disable : true
+          },
+          {
+            id : 'stock',
+            label : 'STOCK',
+            value : reg.stock,
+            type : 'text'
+          },
+          {
+            id : 'minimo',
+            label : 'MINIMO',
+            value : reg.minimo,
+            type : 'text',
+            disable : true
+          },
+          {
+            id : 'precio',
+            label : 'PRECIO',
+            value : reg.precio,
+            type : 'text',
+            disable : true
+          }
+        ];
+    }
   }
 
 
 
+
+    //Función para resetear panels a origen
+    onReset(panel:string) : void{
+      this.formulario = "formBuscarRegistroInventario";
+      $("#"+panel).fadeOut(()=>{
+        this.pnAlta = false;
+        this.pnBuscar = true; 
+        this.tempAlta = false;
+        
+      });
+    }
 
 }

@@ -19,6 +19,7 @@ export class ModalesComponent {
   safeImageUrl: SafeUrl ="";
   @Input() idInventario : number = 0;
   @Input() typeForm : string = "";
+  @Input() tituloModal : string = "";
 
   //variable para obtener los valores del formulario
   formData :any = {};

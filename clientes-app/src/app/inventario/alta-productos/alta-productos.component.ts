@@ -71,11 +71,11 @@ export class AltaProductosComponent implements OnInit {
       this.tituloB = this.formulariosComponent.tituloB;
       this.listaInventario = [];
       let p = new HttpParams();
-      if(this.isbn != ""){
-        p = p.append('isbnLibro',this.isbn.trim());
+      if(this.isbnB != ""){
+        p = p.append('isbnLibro',this.isbnB.trim());
       }
-      if(this.titulo != ""){
-        p = p.append('tituloLibro',this.titulo.trim());
+      if(this.tituloB != ""){
+        p = p.append('tituloLibro',this.tituloB.trim());
       }
 
       this.authService.procesaOperacionGet('/api/inventarios/buscarProductos',this.webToken,p).subscribe({

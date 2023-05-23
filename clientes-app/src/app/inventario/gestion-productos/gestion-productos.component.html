@@ -1,5 +1,11 @@
 <p-menu #menu [popup]="true" [model]="opciones"></p-menu>
 <p-contextMenu #contextMenu [model]="opciones"></p-contextMenu>
+<p-blockUI [target]="pnAltaP" [blocked]="pnAlta">
+  <div class="spinner-border text-light" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</p-blockUI>
+
 <div class="card border-primary mb-3">
   <div class="card-header text-white bg-dark">PANEL GESTIÓN PRODUCTOS</div>
   <div class="card-body">
@@ -8,6 +14,14 @@
       <ng-container *ngTemplateOutlet="templateBuscar"></ng-container>
     </div>
   </div>
+  <p-panel
+    header="Alta de producto"
+    #pnAltaP
+    styleClass="mx-2"
+    id="panelNuevoP"
+  >
+    <ng-container *ngTemplateOutlet="templateAlta"></ng-container>
+  </p-panel>
   <div class="card border-primary mb-3 mx-2">
     <div class="card-header text-white bg-primary">Lista de productos</div>
     <div class="card-body">
@@ -54,6 +68,55 @@
 </div>
 
 <!-- Template de los componentes-->
+<ng-template #templateAlta>
+  <div class="bg-dark text-white" style="margin-top: -17px">
+    <div class="row g-0">
+      <div class="col-md-4 text-center">
+        <img
+          [src]="srcNuevo"
+          alt=""
+          class="img-fluid rounded-start p-3"
+          style="width: 80%"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <app-formularios
+            *ngIf="tempAlta"
+            [formulario]="formulario"
+            [id]="idLibro"
+            [comboLibros]="comboLibros"
+            [isbn]="isbn"
+            [autor]="autor"
+            [editorial]="editorial"
+            [precio]="precio"
+            [stock]="stock"
+            [minimo]="minimo"
+            (idSelect)="onDetalleLibro($event)"
+          ></app-formularios>
+          <div class="form-group row my-2">
+            <div class="col-sm-6">
+              <button
+                class="btn btn-primary mx-2"
+                role="button"
+                (click)="onGuardar()"
+              >
+                Registrar
+              </button>
+              <button
+                class="btn btn-danger"
+                role="button"
+                (click)="onReset('panelNuevoP')"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
 <!-- Template para búsqueda-->
 <ng-template #templateBuscar>
   <div class="card mt-3 mx-auto" style="width: 20rem">
@@ -61,17 +124,17 @@
     <div class="card-body">
       <app-formularios
         [formulario]="formulario"
-        [isbnB]="isbn"
-        [tituloB]="titulo"
+        [isbnB]="isbnB"
+        [tituloB]="tituloB"
       >
       </app-formularios>
-      <button class="btn btn-primary mx-2">Buscar</button>
-      <button class="btn btn-success">Nuevo</button>
+      <button class="btn btn-primary mx-2" (click)="onBuscar()">Buscar</button>
+      <button class="btn btn-success" (click)="onPanelNuevo()">Nuevo</button>
     </div>
   </div>
 </ng-template>
 <!-- Fin de templates-->
-
+<!-- Modal para modificar datos de alta producto-->
 <app-modales
   [template]="modalTemplate"
   [inputs]="inputsModal"
@@ -79,4 +142,16 @@
   [idInventario]="idInventario"
   (eventEmitter)="onModificar($event)"
   [typeForm]="typeForm"
+  [tituloModal]="tituloModal"
+></app-modales>
+
+<!-- Modal para realizar re orden-->
+<app-modales
+  [template]="modalTemplate"
+  [inputs]="inputsModal"
+  [image]="src"
+  [idInventario]="idInventario"
+  (eventEmitter)="onModificar($event)"
+  [typeForm]="typeForm"
+  [tituloModal]="tituloModal"
 ></app-modales>

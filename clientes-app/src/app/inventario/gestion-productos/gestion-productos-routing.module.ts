@@ -7,7 +7,8 @@ import { PanelModule } from 'primeng/panel';
 import {TableModule} from 'primeng/table';
 import {ContextMenuModule} from 'primeng/contextmenu';
 import {MenuModule} from 'primeng/menu';
-
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 const routes : Routes = [
@@ -22,6 +23,8 @@ const routes : Routes = [
     PanelModule,
     TableModule,
     ContextMenuModule,
+    BlockUIModule,
+    ProgressSpinnerModule,
     MenuModule,
     RouterModule.forChild(routes)
   ]
