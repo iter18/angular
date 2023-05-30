@@ -158,24 +158,20 @@ export class GestionProductosComponent implements OnInit {
         return;
     }
     this.pnAlta = true;
-    let body : {
-      idLibro : number,
+    const body : {
       idMovimiento : number,
       stock : number,
       minimo : number,
-      precio : number
+      precio : number,
+      libro : {id:number}
     } = {
-      idLibro : 0,
-      idMovimiento : 0,
-      stock : 0,
-      minimo : 0,
-      precio :0.0,
+      idMovimiento : 1,
+      stock : this.stock,
+      minimo : this.minimo,
+      precio : this.precio,
+      libro : {id : this.idLibro}
     }
-    body.idLibro = this.idLibro;
-    body.idMovimiento = 1;
-    body.stock = this.stock;
-    body.minimo = this.minimo;
-    body.precio = this.precio;
+
 
     this.authService.procesaOperacionPost('/api/inventarios/altaProducto',this.webToken,body).subscribe({
       next : (reg : any) =>{
@@ -199,7 +195,8 @@ export class GestionProductosComponent implements OnInit {
     this.minimoM = formData.minimo;
     this.precioM = formData.precio;
     this.idInventario = formData.idInventario;
-
+    this.idLibro = formData.idLibro;
+    
     if(this.stockM == null || this.stockM<=0 ||
       this.minimoM == null || this.minimoM<=0 ||
       this.precioM == null || this.precioM<=0){
@@ -225,26 +222,24 @@ export class GestionProductosComponent implements OnInit {
     }).then((result) => {
         if(result.isConfirmed){
           
-            let body : {
+            const body : {
                 idInventario : number,
                 idMovimiento : number,
                 stock : number,
                 minimo : number,
-                precio : number
+                precio : number,
+                libro : {id : number}
             } = {
-                idInventario : 0,
-                idMovimiento : 0,
-                stock : 0,
-                minimo : 0,
-                precio : 0.0
+                idInventario : this.idInventario,
+                idMovimiento : 5,
+                stock : this.stockM,
+                minimo : this.minimoM,
+                precio : this.precioM,
+                libro : {id : this.idLibro}
             }
-            body.idInventario = this.idInventario;
-            body.idMovimiento = 5;
-            body.stock = this.stockM;
-            body.minimo = this.minimo;
-            body.precio = this.precioM;
-        
-            this.authService.procesaOperacionPut('/api/inventarios/modificarProducto',this.webToken,body).subscribe({
+
+            
+            this.authService.procesaOperacionPut('/api/inventarios/modificarProducto',this.webToken,JSON.stringify(body)).subscribe({
               next : (reg : any) => {
                 if(reg.status == 201){
                   this.listaInventario[this.idx] = reg.body;
@@ -328,6 +323,7 @@ export class GestionProductosComponent implements OnInit {
         this.typeForm = "formGestionInventario";
         this.modalTemplate = 'inputs';
         this.tituloModal = "Modificar Producto";
+        this.idLibro = this.reg.libro.id;
           this.inputsModal = [
             {
               id :'isbn', 

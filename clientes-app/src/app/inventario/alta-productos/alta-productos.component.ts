@@ -109,24 +109,21 @@ export class AltaProductosComponent implements OnInit {
       $('.spinner').fadeIn();
     });
 
-    let body :{
-                idLibro : number, 
+    const body :{
                 idMovimiento : number,
                 stock:number, 
                 minimo:number, 
-                precio: number} = {
-                  idLibro : 0,
-                  idMovimiento : 0,
-                  stock : 0,
-                  minimo : 0,
-                  precio : 0.0}
-    body.idLibro = this.idLibro;
-    body.idMovimiento = 1;
-    body.stock = this.stock;
-    body.minimo = this.minimo;
-    body.precio = this.precio;
+                precio: number,
+                libro : {id: number}
+              } = {
+                  idMovimiento : 1,
+                  stock : this.stock,
+                  minimo : this.minimo,
+                  precio : this.precio,
+                  libro : {id :this.idLibro}
+                }
 
-    this.authService.procesaOperacionPost('/api/inventarios/altaProducto',this.webToken,body).subscribe({
+    this.authService.procesaOperacionPost('/api/inventarios/altaProducto',this.webToken,JSON.stringify(body)).subscribe({
       next : (response : any) => {
         if(response.status == 201){
           swal.fire('Registro éxitoso!','El producto fue dado de alta en el inventario','success');

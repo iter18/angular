@@ -20,6 +20,7 @@ export class ModalesComponent {
   @Input() idInventario : number = 0;
   @Input() typeForm : string = "";
   @Input() tituloModal : string = "";
+  @Input() idLibro : number = 0;
 
   //variable para obtener los valores del formulario
   formData :any = {};
@@ -46,6 +47,7 @@ export class ModalesComponent {
     //componente hijo
     if(this.typeForm === "formGestionInventario"){
         this.formData = {
+          idLibro : this.idLibro,
           idInventario: this.idInventario,
           stock: $("#stock").val(),
           minimo : $("#minimo").val(),
