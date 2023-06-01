@@ -262,7 +262,7 @@ export class GestionProductosComponent implements OnInit {
                 }
               },
               error : (error : HttpErrorResponse) => {
-        
+                swal.fire('Error:',this.authService.msgDecripcion,'error');
               }
             });
         }
