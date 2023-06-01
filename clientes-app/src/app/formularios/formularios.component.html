@@ -233,13 +233,25 @@
       </div>
     </div>
     <div class="form-group row my-2">
-      <label for="precio" class="col-form-label col-sm-2">Precio:</label>
+      <label for="precioCompra" class="col-form-label col-sm-2">Precio compra:</label>
       <div class="col-sm-6">
         <input
           type="text"
           class="form-control"
           name="precio"
-          [(ngModel)]="precio"
+          [(ngModel)]="precioCompra"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group row my-2">
+      <label for="precioVenta" class="col-form-label col-sm-2">Precio venta:</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          name="precio"
+          [(ngModel)]="precioVenta"
           required
         />
       </div>

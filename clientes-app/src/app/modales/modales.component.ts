@@ -51,7 +51,8 @@ export class ModalesComponent {
           idInventario: this.idInventario,
           stock: $("#stock").val(),
           minimo : $("#minimo").val(),
-          precio : $("#precio").val()
+          precioCompra : $("#precioCompra").val(),
+          precioVenta : $("#precioVenta").val()
         }
     }
 

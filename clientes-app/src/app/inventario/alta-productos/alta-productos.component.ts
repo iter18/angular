@@ -22,7 +22,8 @@ export class AltaProductosComponent implements OnInit {
   isbn : string ="";
   editorial : string = "";
   stock : number = 0;
-  precio : number = 0.0;
+  precioCompra : number = 0.0;
+  precioVenta : number = 0.0;
   autor : string = "";
   minimo : number = 0;
   src :string = "";
@@ -94,12 +95,14 @@ export class AltaProductosComponent implements OnInit {
   onGuardar() : void {
     this.stock = this.formulariosComponent.stock;
     this.minimo = this.formulariosComponent.minimo;
-    this.precio = this.formulariosComponent.precio;
+    this.precioCompra = this.formulariosComponent.precioCompra;
+    this.precioVenta = this.formulariosComponent.precioVenta;
     this.idLibro = this.formulariosComponent.id;
     if(this.stock == null || this.stock<=0 ||
       this.minimo == null || this.minimo<=0 ||
-      this.precio == null || this.precio<=0){
-        swal.fire('Campos obligatorios:','Sotck,minimo y precio','error');
+      this.precioCompra == null || this.precioCompra<=0 ||
+      this.precioVenta == null || this.precioVenta<=0){
+        swal.fire('Campos obligatorios:','Sotck,minimo y precios de compra/venta','error');
         return;
     }
 
@@ -113,13 +116,15 @@ export class AltaProductosComponent implements OnInit {
                 idMovimiento : number,
                 stock:number, 
                 minimo:number, 
-                precio: number,
+                precioCompra: number,
+                precioVenta: number,
                 libro : {id: number}
               } = {
                   idMovimiento : 1,
                   stock : this.stock,
                   minimo : this.minimo,
-                  precio : this.precio,
+                  precioCompra : this.precioCompra,
+                  precioVenta : this.precioVenta,
                   libro : {id :this.idLibro}
                 }
 

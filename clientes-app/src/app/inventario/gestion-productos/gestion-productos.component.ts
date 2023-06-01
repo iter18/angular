@@ -39,10 +39,12 @@ export class GestionProductosComponent implements OnInit {
   comboLibros : any[] = [];
   autor : string = "";
   editorial : string = "";
-  precio : number = 0.0;
+  precioCompra : number = 0.0;
+  precioVenta : number = 0.0;
   stock : number = 0;
   minimo : number = 0;
-  precioM : number = 0.0;
+  precioCompraM : number = 0.0;
+  precioVentaM : number = 0.0;
   stockM : number = 0;
   minimoM : number = 0;
   panelAltaProducto : boolean = false;
@@ -148,13 +150,15 @@ export class GestionProductosComponent implements OnInit {
     
     this.stock = this.formulariosComponen.stock;
     this.minimo = this.formulariosComponen.minimo;
-    this.precio = this.formulariosComponen.precio;
+    this.precioCompra = this.formulariosComponen.precioCompra;
+    this.precioVenta = this.formulariosComponen.precioVenta;
     this.idLibro = this.formulariosComponen.id;
     
     if(this.stock == null || this.stock<=0 ||
       this.minimo == null || this.minimo<=0 ||
-      this.precio == null || this.precio<=0){
-        swal.fire('Campos obligatorios:','Sotck,minimo y precio','error');
+      this.precioCompra == null || this.precioCompra<=0 ||
+      this.precioVenta == null || this.precioVenta<=0){
+        swal.fire('Campos obligatorios:','Sotck,minimo y precios compra/venta','error');
         return;
     }
     this.pnAlta = true;
@@ -162,13 +166,15 @@ export class GestionProductosComponent implements OnInit {
       idMovimiento : number,
       stock : number,
       minimo : number,
-      precio : number,
+      precioCompra : number,
+      precioVenta : number,
       libro : {id:number}
     } = {
       idMovimiento : 1,
       stock : this.stock,
       minimo : this.minimo,
-      precio : this.precio,
+      precioCompra : this.precioCompra,
+      precioVenta : this.precioVenta,
       libro : {id : this.idLibro}
     }
 
@@ -193,14 +199,16 @@ export class GestionProductosComponent implements OnInit {
 
     this.stockM = formData.stock;
     this.minimoM = formData.minimo;
-    this.precioM = formData.precio;
+    this.precioCompraM = formData.precioCompra;
+    this.precioVentaM = formData.precioVenta;
     this.idInventario = formData.idInventario;
     this.idLibro = formData.idLibro;
     
     if(this.stockM == null || this.stockM<=0 ||
       this.minimoM == null || this.minimoM<=0 ||
-      this.precioM == null || this.precioM<=0){
-        swal.fire('Campos obligatorios:','Sotck,minimo y precio','error');
+      this.precioCompraM == null || this.precioCompraM<=0 ||
+      this.precioVentaM == null || this.precioVentaM<=0){
+        swal.fire('Campos obligatorios:','Sotck,minimo y precios de venta/compra','error');
         return;
     }
 
@@ -227,14 +235,16 @@ export class GestionProductosComponent implements OnInit {
                 idMovimiento : number,
                 stock : number,
                 minimo : number,
-                precio : number,
+                precioCompra : number,
+                precioVenta : number,
                 libro : {id : number}
             } = {
                 idInventario : this.idInventario,
                 idMovimiento : 5,
                 stock : this.stockM,
                 minimo : this.minimoM,
-                precio : this.precioM,
+                precioCompra : this.precioCompraM,
+                precioVenta : this.precioVentaM,
                 libro : {id : this.idLibro}
             }
 
@@ -298,8 +308,9 @@ export class GestionProductosComponent implements OnInit {
     //funcion para mostrar panel de alta
     onPanelNuevo() : void {
       //this.resetVaribles();
-      this.formulario = "formAltaInventario";
+      
       $("#buscar").fadeOut(()=>{
+        this.formulario = "formAltaInventario";
         this.pnBuscar = false;
         this.tempAlta = true;
         $("#panelNuevoP").fadeIn(()=>{
@@ -359,9 +370,15 @@ export class GestionProductosComponent implements OnInit {
               type : 'text'
             },
             {
-              id : 'precio',
-              label : 'PRECIO',
-              value : reg.precio,
+              id : 'precioCompra',
+              label : 'PRECIO COMPRA',
+              value : reg.precioCompra,
+              type : 'text'
+            },
+            {
+              id : 'precioVenta',
+              label : 'PRECIO VENTA',
+              value : reg.precioVenta,
               type : 'text'
             }
           ];
@@ -409,7 +426,14 @@ export class GestionProductosComponent implements OnInit {
           },
           {
             id : 'precio',
-            label : 'PRECIO',
+            label : 'PRECIO COMPRA',
+            value : reg.precio,
+            type : 'text',
+            disable : true
+          },
+          {
+            id : 'precio',
+            label : 'PRECIO VENTA',
             value : reg.precio,
             type : 'text',
             disable : true
@@ -423,12 +447,12 @@ export class GestionProductosComponent implements OnInit {
 
     //Función para resetear panels a origen
     onReset(panel:string) : void{
-      this.formulario = "formBuscarRegistroInventario";
+      
       $("#"+panel).fadeOut(()=>{
         this.pnAlta = false;
         this.pnBuscar = true; 
         this.tempAlta = false;
-        
+        this.formulario = "formBuscarRegistroInventario";
       });
     }
 

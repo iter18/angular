@@ -35,8 +35,10 @@ export class FormulariosComponent {
   //Variable para gestion de inventario
   @Input() autor : string = "";
   @Input() stock : number = 0;
-  @Input() precio : number = 0.0;
+  @Input() precioCompra : number = 0.0;
   @Input() minimo : number = 0;
+  @Input() precioVenta : number = 0.0;
+
 
   //Variable para seleccionar una imagen para los forms
   @Output() imagenSeleccionada : EventEmitter<File> = new EventEmitter<File>();

@@ -23,7 +23,8 @@
             <th>ISBN</th>
             <th>TITULO</th>
             <th>STOCK</th>
-            <th>PRECIO</th>
+            <th>PRECIO COMPRA</th>
+            <th>PRECIO VENTA</th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +77,8 @@
             [isbn]="isbn"
             [autor]="autor"
             [editorial]="editorial"
-            [precio]="precio"
+            [precioCompra]="precioCompra"
+            [precioVenta]="precioVenta"
             [stock]="stock"
             [minimo]="minimo"
             (idSelect)="onDetalleLibro($event)"
@@ -123,6 +125,7 @@
     <td>{{ inventario.libro.isbn }}</td>
     <td>{{ inventario.libro.titulo }}</td>
     <td>{{ inventario.stock }}</td>
-    <td>{{ inventario.precio }}</td>
+    <td>{{ inventario.precioCompra }}</td>
+    <td>{{ inventario.precioVenta }}</td>
   </tr>
 </ng-template>
