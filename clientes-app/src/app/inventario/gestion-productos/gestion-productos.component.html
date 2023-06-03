@@ -144,7 +144,7 @@
   [image]="src"
   [idInventario]="idInventario"
   [idLibro]="idLibro"
-  (eventEmitter)="onModificar($event)"
+  (eventEmitter)="isModificar ? onModificar($event) : onReorden($event)"
   [typeForm]="typeForm"
   [tituloModal]="tituloModal"
 ></app-modales>
@@ -156,7 +156,7 @@
   [image]="src"
   [idInventario]="idInventario"
   [idLibro]="idLibro"
-  (eventEmitter)="onModificar($event)"
+  (eventEmitter)="isModificar ? onModificar($event) : onReorden($event)"
   [typeForm]="typeForm"
   [tituloModal]="tituloModal"
 ></app-modales>

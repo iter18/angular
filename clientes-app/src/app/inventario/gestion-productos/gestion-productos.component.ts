@@ -50,7 +50,8 @@ export class GestionProductosComponent implements OnInit {
   panelAltaProducto : boolean = false;
   tituloModal : string = "";
   tempAlta : boolean = false;
-
+  cantidadReorden : number = 0;
+  isModificar : boolean = false;
 
   constructor(private router : Router, private authService : AuthService){}
 
@@ -266,10 +267,26 @@ export class GestionProductosComponent implements OnInit {
               }
             });
         }
-    });
-
-    
+    }); 
   }
+
+    //funcion para punto de reorden
+    onReorden(formData:any) : void {
+      this.precioCompraM = formData.precioCompra;
+      this.idInventario = formData.idInventario;
+      this.idLibro = formData.idLibro;
+      this.cantidadReorden = formData.cantidadReorden;
+
+      if(this.precioCompraM == null || this.precioCompraM<=0 ||
+        this.cantidadReorden == null || this.cantidadReorden<=0){
+          swal.fire('Campos obligatorios:','Precio de compra y cantidad de reorden','error');
+          return;
+      }
+      const arreglo = Object.values(formData);
+      console.log("form"+ arreglo)
+      
+
+    }
 
     //funcion para obtener un registro unico por ID
     onDetalleLibro(id : any ) : void{
@@ -335,6 +352,7 @@ export class GestionProductosComponent implements OnInit {
         this.modalTemplate = 'inputs';
         this.tituloModal = "Modificar Producto";
         this.idLibro = this.reg.libro.id;
+        this.isModificar = true;
           this.inputsModal = [
             {
               id :'isbn', 
@@ -386,9 +404,11 @@ export class GestionProductosComponent implements OnInit {
     if(type == "reorden"){
       this.src = './assets/uplodas/'+reg.libro.rutaFoto;
       this.idInventario = reg.id;
-      this.typeForm = "formGestionInventario";
+      this.typeForm = "formReorden";
       this.modalTemplate = 'inputs';
       this.tituloModal = "Reorden Producto";
+      this.idLibro = this.reg.libro.id;
+      this.isModificar = false;
         this.inputsModal = [
           {
             id :'isbn', 
@@ -415,6 +435,13 @@ export class GestionProductosComponent implements OnInit {
             id : 'stock',
             label : 'STOCK',
             value : reg.stock,
+            type : 'text',
+            disable : true
+          },
+          {
+            id : 'reorden',
+            label : 'CANTIDAD REORDEN',
+            value : 0,
             type : 'text'
           },
           {
@@ -425,16 +452,15 @@ export class GestionProductosComponent implements OnInit {
             disable : true
           },
           {
-            id : 'precio',
+            id : 'precioCompra',
             label : 'PRECIO COMPRA',
-            value : reg.precio,
+            value : reg.precioCompra,
             type : 'text',
-            disable : true
           },
           {
-            id : 'precio',
+            id : 'precioVenta',
             label : 'PRECIO VENTA',
-            value : reg.precio,
+            value : reg.precioVenta,
             type : 'text',
             disable : true
           }

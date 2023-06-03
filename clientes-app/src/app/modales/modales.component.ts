@@ -44,7 +44,7 @@ export class ModalesComponent {
   //funcion para enviar datos de los campos de texto
   onSubmit(){
     //se especifica que se enviara al componente padre la funcionalidad de evento del
-    //componente hijo
+    //componente hijo Modificar Producto
     if(this.typeForm === "formGestionInventario"){
         this.formData = {
           idLibro : this.idLibro,
@@ -54,9 +54,20 @@ export class ModalesComponent {
           precioCompra : $("#precioCompra").val(),
           precioVenta : $("#precioVenta").val()
         }
+        this.eventEmitter.emit(this.formData);
+    }
+    //Realizar Reorden
+    if(this.typeForm === "formReorden"){
+      this.formData = {
+        idLibro : this.idLibro,
+        idInventario: this.idInventario,
+        cantidadReorden : $("#reorden").val(),
+        precioCompra : $("#precioCompra").val(),
+      }
+      this.eventEmitter.emit(this.formData);
     }
 
-    this.eventEmitter.emit(this.formData);
+    
   }
 
 }
