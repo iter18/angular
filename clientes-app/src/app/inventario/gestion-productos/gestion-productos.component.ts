@@ -282,8 +282,57 @@ export class GestionProductosComponent implements OnInit {
           swal.fire('Campos obligatorios:','Precio de compra y cantidad de reorden','error');
           return;
       }
-      const arreglo = Object.values(formData);
-      console.log("form"+ arreglo)
+      const confirm = swal.mixin({
+        customClass : {
+          confirmButton : 'btn btn-success',
+          cancelButton : 'btn btn-danger'
+        },
+        buttonsStyling : false
+      });
+      confirm.fire({
+        title: 'Confirmación',
+        text: `Esta seguro de realizar esta operación?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, aceptar!',
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true
+      }).then((result) => {
+          if(result.isConfirmed){
+            
+              const body : {
+                  idInventario : number,
+                  idMovimiento : number,
+                  precioCompra : number,
+                  cantidadReorden : number,
+                  libro : {id : number}
+              } = {
+                  idInventario : this.idInventario,
+                  idMovimiento : 2,
+                  precioCompra : this.precioCompraM,
+                  cantidadReorden : this.cantidadReorden,
+                  libro : {id : this.idLibro}
+              }
+  
+              
+              this.authService.procesaOperacionPut('/api/inventarios/reordenProducto',this.webToken,JSON.stringify(body)).subscribe({
+                next : (reg : any) => {
+                  if(reg.status == 201){
+                    this.listaInventario[this.idx] = reg.body;
+                    confirm.fire(
+                      'Exitoso!',
+                      'La operción ha sido guardada',
+                      'success'
+                    )
+                    $('#myModal').modal('hide');
+                  }
+                },
+                error : (error : HttpErrorResponse) => {
+                  swal.fire('Error:',this.authService.msgDecripcion,'error');
+                }
+              });
+          }
+      });        
       
 
     }

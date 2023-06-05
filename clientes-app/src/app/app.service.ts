@@ -60,6 +60,8 @@ export class AuthService {
                     if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
                       this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                         this.router.navigate(['login']);
+                    }else{ 
+                      this.msgDecripcion = "Error interno en servidor";
                     }
                   }
                   if(error.status == 409){
@@ -86,6 +88,8 @@ export class AuthService {
                     if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
                       this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                         this.router.navigate(['login']);
+                    }else{ 
+                      this.msgDecripcion = "Error interno en servidor";
                     }
                   }
                   if(error.status == 409){
@@ -117,6 +121,8 @@ export class AuthService {
                       if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
                         this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                           this.router.navigate(['login']);
+                      }else{ 
+                        this.msgDecripcion = "Error interno en servidor";
                       }
                     }
                     if(error.status == 409){
@@ -172,6 +178,8 @@ export class AuthService {
                               if(error.error.exception == "io.jsonwebtoken.ExpiredJwtException" || error.error.exception == "io.jsonwebtoken.SignatureException"){
                                 this.msgDecripcion = "La sesión ha caducado o se reincio el servidor";
                                   this.router.navigate(['login']);
+                              }else{ 
+                                this.msgDecripcion = "Error interno en servidor";
                               }
                             }
                             if(error.status == 409){
