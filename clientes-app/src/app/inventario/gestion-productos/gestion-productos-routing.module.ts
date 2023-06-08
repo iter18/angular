@@ -9,6 +9,7 @@ import {ContextMenuModule} from 'primeng/contextmenu';
 import {MenuModule} from 'primeng/menu';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ButtonModule } from 'primeng/button';
 
 
 const routes : Routes = [
@@ -22,6 +23,7 @@ const routes : Routes = [
     CommonModule,
     PanelModule,
     TableModule,
+    ButtonModule,
     ContextMenuModule,
     BlockUIModule,
     ProgressSpinnerModule,

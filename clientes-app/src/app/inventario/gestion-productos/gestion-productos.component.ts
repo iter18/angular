@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/app.service';
 import { FormulariosComponent } from 'src/app/formularios/formularios.component';
 import swal from 'sweetalert2';
-import { MenuItem } from 'primeng/api';
+import { MenuItem,PrimeIcons } from 'primeng/api';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-gestion-productos',
@@ -52,6 +53,9 @@ export class GestionProductosComponent implements OnInit {
   tempAlta : boolean = false;
   cantidadReorden : number = 0;
   isModificar : boolean = false;
+  historicoProducto : any[] = [];
+  templateHistorico : boolean = false;
+  blockTemplateHistorico : boolean = false;
 
   constructor(private router : Router, private authService : AuthService){}
 
@@ -66,6 +70,7 @@ export class GestionProductosComponent implements OnInit {
 
     this.formulario = "formBuscarRegistroInventario";
     $("#panelNuevoP").hide();
+    $("#historicoProducto").hide();
     this.llenaComboLibros();
     this.opciones = [
 
@@ -80,7 +85,7 @@ export class GestionProductosComponent implements OnInit {
         label : 'Historico',
         icon : 'fa fa-list',
         command : () =>{
-          console.log("second");
+          this.showPanelHistorico();
         }
       },
       {
@@ -146,6 +151,27 @@ export class GestionProductosComponent implements OnInit {
       }
     });
   }
+
+  //Función para obtener el historico del producto seleccionado
+  onHistoricoProducto() : void {
+
+    this.blockTemplateHistorico = true;
+
+    this.authService.procesaOperacionGet('/api/libros/historico/'+this.reg.libro.id,this.webToken,'').subscribe({
+      next : (data : any ) => {
+        if(data.status == 200){
+            this.blockTemplateHistorico = false;
+            this.src = "./assets/uplodas/"+data.body[0].libro.rutaFoto;
+            this.titulo = data.body[0].libro.titulo;
+            this.historicoProducto = data.body;
+        }
+      },
+      error : (error : HttpErrorResponse) => {
+        swal.fire('Error:', this.authService.msgDecripcion,'error');
+      }
+    });
+  }
+
   //función para registrar nuevo producto en inventario
   onGuardar() : void {
     
@@ -385,6 +411,23 @@ export class GestionProductosComponent implements OnInit {
         
       });
     }
+
+    //funcion para mostrar panel de historico Producto
+    showPanelHistorico() : void {
+
+      $("#panelGestionProductos").fadeOut(() => {
+        
+        this.pnBuscar = false;
+        this.tempAlta = false;
+        
+        $("#historicoProducto").fadeIn(() => {
+          this.templateHistorico = true;
+          this.onHistoricoProducto();
+          //this.templateHistorico = false;
+          
+        });
+      });
+    }
  
   //función para llamar modalBox
   showModal(type:string) : void {
@@ -517,6 +560,10 @@ export class GestionProductosComponent implements OnInit {
     }
   }
 
+  //Funcipon para formatear fecha
+  formatearFecha(fecha : string) : string{
+    return moment(fecha).format('DD/MM/YYYY HH:mm:ss');
+  }
 
 
 
@@ -525,9 +572,14 @@ export class GestionProductosComponent implements OnInit {
       
       $("#"+panel).fadeOut(()=>{
         this.pnAlta = false;
-        this.pnBuscar = true; 
         this.tempAlta = false;
-        this.formulario = "formBuscarRegistroInventario";
+        this.templateHistorico = false;
+        $("#panelNuevoP").hide();
+        $("#panelGestionProductos").fadeIn(() => {
+          this.formulario = "formBuscarRegistroInventario";
+          this.pnBuscar = true; 
+        });
+        
       });
     }
 
