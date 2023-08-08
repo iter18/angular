@@ -74,6 +74,45 @@ export class AuthService {
                   return throwError(()=> error);
                 }));
               }
+              /**Servicio para operaciones GET para reportes */
+              procesaOperacionGetResource(uri: string, token: string, params: any): Observable<HttpResponse<Blob>> {
+                const headersApi = new HttpHeaders({
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Accept': 'application/json',
+                  'Cache-Control': 'no-cache',
+                  'Authorization': token,
+                });
+            
+                return this.http.get(this.urlEndPoint + uri, {
+                  headers: headersApi,
+                  observe: 'response',
+                  params: params,
+                  reportProgress: true,
+                  responseType: 'blob', // Cambiado a 'blob' para manejar archivos
+                  withCredentials: true,
+                }).pipe(
+                  catchError((error: HttpErrorResponse) => {
+                    if (error.status === 401) {
+                      if (
+                        error.error.exception === 'io.jsonwebtoken.ExpiredJwtException' ||
+                        error.error.exception === 'io.jsonwebtoken.SignatureException'
+                      ) {
+                        this.msgDecripcion = 'La sesión ha caducado o se reinció el servidor';
+                        this.router.navigate(['login']);
+                      } else {
+                        this.msgDecripcion = 'Error interno en el servidor';
+                      }
+                    }
+                    if (error.status === 409) {
+                      this.msgDecripcion = error.error;
+                    }
+                    if (error.status === 403) {
+                      this.msgDecripcion = 'Acceso denegado al recurso solicitado';
+                    }
+                    return throwError(() => error);
+                  })
+                );
+              }
               /** Servicio para Operaciones Delete */
               procesaOperacionDelete(uri : string, token : string, params : any) : Observable<HttpResponse<any>>{
                 var headersApi = new HttpHeaders({'Content-Type':'application/x-www-form-urlencoded',

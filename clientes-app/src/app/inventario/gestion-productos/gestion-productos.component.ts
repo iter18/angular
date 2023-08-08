@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams,HttpResponse  } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/app.service';
@@ -374,6 +374,24 @@ export class GestionProductosComponent implements OnInit {
             this.autor = reg.body.autor.nombre+" "+reg.body.autor.apellido;
             this.editorial = reg.body.libro.editorial;
             this.srcNuevo ="./assets/uplodas/"+reg.body.libro.rutaFoto;
+          }
+        },
+        error : (error : HttpErrorResponse) => {
+          swal.fire('Error:',this.authService.msgDecripcion,'error');
+        }
+      });
+    }
+    
+    onExport():void{
+      this.authService.procesaOperacionGetResource('/api/libros/historicoReporte/'+this.reg.libro.id,this.webToken,'').subscribe({
+        next : (response: HttpResponse<Blob | null>) =>{
+
+          if (response.body) {
+            const blob = response.body;
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+          } else {
+            console.error('El cuerpo de la respuesta es nulo.');
           }
         },
         error : (error : HttpErrorResponse) => {

@@ -19,12 +19,25 @@
 >
   <!-- Tabla agrupado por campos moso rowspan-->
   <div class="row" *ngIf="templateHistorico">
-    <p-button
-      label="Regresar"
-      styleClass="p-button-raised p-button-warning"
-      icon="fa-solid fa-angles-left"
-      (onClick)="onReset('historicoProducto')"
-    ></p-button>
+    <div class="d-flex flex-row">
+      <div class="p-2">
+        <p-button
+          label="Regresar"
+          styleClass="p-button-raised p-button-warning"
+          icon="fa-solid fa-angles-left"
+          (onClick)="onReset('historicoProducto')"
+        ></p-button>
+      </div>
+      <div class="p-2">
+        <p-button
+          label="Exportar"
+          styleClass="p-button-raised p-button-danger"
+          icon="fa-solid fa-file-pdf"
+          (onClick)="onExport()"
+        ></p-button>
+      </div>
+    </div>
+
     <!--<p-table
       [value]="historicoProducto"
       rowGroupMode="rowspan"
