@@ -21,6 +21,7 @@ export class ModalesComponent {
   @Input() typeForm : string = "";
   @Input() tituloModal : string = "";
   @Input() idLibro : number = 0;
+  @Input() bajaInventario : number = 0;
 
   //variable para obtener los valores del formulario
   formData :any = {};
@@ -52,7 +53,8 @@ export class ModalesComponent {
           stock: $("#stock").val(),
           minimo : $("#minimo").val(),
           precioCompra : $("#precioCompra").val(),
-          precioVenta : $("#precioVenta").val()
+          precioVenta : $("#precioVenta").val(),
+          bajaInventario : this.bajaInventario
         }
         this.eventEmitter.emit(this.formData);
     }

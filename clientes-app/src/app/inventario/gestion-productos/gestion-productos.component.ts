@@ -56,6 +56,7 @@ export class GestionProductosComponent implements OnInit {
   historicoProducto : any[] = [];
   templateHistorico : boolean = false;
   blockTemplateHistorico : boolean = false;
+  bajaInventario : number = 0;
 
   constructor(private router : Router, private authService : AuthService){}
 
@@ -99,7 +100,7 @@ export class GestionProductosComponent implements OnInit {
         label : 'Eliminar',
         icon : 'fa-regular fa-trash-can',
         command : () =>{
-          console.log("second");
+          this.onEliminar();
         }
       }
     ];
@@ -230,6 +231,15 @@ export class GestionProductosComponent implements OnInit {
     this.precioVentaM = formData.precioVenta;
     this.idInventario = formData.idInventario;
     this.idLibro = formData.idLibro;
+    let movimiento = formData.bajaInventario == 0 ? 5 : 7;
+    let url = "";
+
+    if(movimiento==5){
+      url = '/api/inventarios/modificarProducto';
+    }else{
+      url = '/api/inventarios/reingresoProducto';
+    }
+    
     
     if(this.stockM == null || this.stockM<=0 ||
       this.minimoM == null || this.minimoM<=0 ||
@@ -267,16 +277,18 @@ export class GestionProductosComponent implements OnInit {
                 libro : {id : number}
             } = {
                 idInventario : this.idInventario,
-                idMovimiento : 5,
+                idMovimiento : movimiento,
                 stock : this.stockM,
                 minimo : this.minimoM,
                 precioCompra : this.precioCompraM,
                 precioVenta : this.precioVentaM,
-                libro : {id : this.idLibro}
+                libro : {
+                          id : this.idLibro
+                        }
             }
 
             
-            this.authService.procesaOperacionPut('/api/inventarios/modificarProducto',this.webToken,JSON.stringify(body)).subscribe({
+            this.authService.procesaOperacionPut(url,this.webToken,JSON.stringify(body)).subscribe({
               next : (reg : any) => {
                 if(reg.status == 201){
                   this.listaInventario[this.idx] = reg.body;
@@ -361,6 +373,45 @@ export class GestionProductosComponent implements OnInit {
       });        
       
 
+    }
+
+    //funcion para retirar un producto del inventario
+    onEliminar() : void{
+    
+      const swalWithBootstrapButtons = swal.mixin({
+        customClass : {
+          confirmButton : 'btn btn-success',
+          cancelButton : 'btn btn-danger'
+        },
+        buttonsStyling : false
+      });
+      
+      swalWithBootstrapButtons.fire({
+        title : 'Está seguro?',
+        text : 'Seguro que desea retirar el producto del stock de inventario',
+        icon : 'warning',
+        showCancelButton : true,
+        confirmButtonText : 'Si, retirar!', 
+        cancelButtonText : 'No, cancelar!',
+        reverseButtons : true
+      }).then((result) => {
+        if(result.isConfirmed){
+          this.authService.procesaOperacionPut('/api/inventarios/bajaProducto/'+this.reg.id,this.webToken,'').subscribe({
+            next : (response:any) =>{
+              if(response.status == 201){
+                this.listaInventario[this.idx] = response.body;
+                swalWithBootstrapButtons.fire(
+                  'Eliminado!',
+                  'El registro seleccionado ha sido borrado',
+                  'success'
+                )
+              }
+            },error : (err:HttpErrorResponse)=>{
+              swal.fire('Error en la operación: ',this.authService.msgDecripcion,'error');
+            }
+          });
+        }
+      });
     }
 
     //funcion para obtener un registro unico por ID
@@ -458,6 +509,7 @@ export class GestionProductosComponent implements OnInit {
     if(type == "editar"){
         this.src = './assets/uplodas/'+this.reg.libro.rutaFoto;
         this.idInventario = this.reg.id;
+        this.bajaInventario = this.reg.baja;
         this.typeForm = "formGestionInventario";
         this.modalTemplate = 'inputs';
         this.tituloModal = "Modificar Producto";
